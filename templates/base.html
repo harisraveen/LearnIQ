@@ -43,9 +43,12 @@
 
 <div class="app-layout">
 
+    <!-- ================= SIDEBAR OVERLAY (Mobile Only) ================= -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- ================= SIDEBAR ================= -->
 
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
 
         <div>
 
@@ -134,6 +137,13 @@
 
         <div class="topbar mb-4">
 
+            <!-- Mobile Hamburger Button -->
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
             <div>
 
                 <h4 class="mb-0">
@@ -175,6 +185,68 @@
     </main>
 
 </div>
+
+<!-- ================= HAMBURGER & SIDEBAR TOGGLE ================= -->
+<script>
+// Mobile Hamburger Menu
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const menuLinks = document.querySelectorAll('.menu a');
+
+if (hamburgerBtn) {
+    // Toggle sidebar on hamburger click
+    hamburgerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sidebar.classList.toggle('show');
+        sidebarOverlay.classList.toggle('show');
+        hamburgerBtn.classList.toggle('active');
+        document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : 'auto';
+    });
+
+    // Close sidebar when clicking overlay
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
+            hamburgerBtn.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+    }
+
+    // Close sidebar on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains('show')) {
+            sidebar.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
+            hamburgerBtn.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    // Close sidebar when clicking menu links (mobile only)
+    menuLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+                hamburgerBtn.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+    });
+
+    // Close sidebar on window resize (when moving from mobile to desktop)
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
+            hamburgerBtn.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
+}
+</script>
 
 <!-- ================= DARK MODE ================= -->
 

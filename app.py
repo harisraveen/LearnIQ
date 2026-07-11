@@ -20,7 +20,9 @@ from database import (
 
 app = Flask(__name__)
 
-app.secret_key = "ai_quiz_builder_secret"
+import os
+
+app.secret_key = os.getenv("SECRET_KEY", "ai_quiz_builder_secret")
 
 generated_questions = []
 current_topic = ""

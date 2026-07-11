@@ -1302,6 +1302,19 @@ textarea.form-control{
     padding:16px 20px;
 
 }
+
+/* =====================================================
+   MOBILE NAVIGATION - DARK MODE
+===================================================== */
+
+body.dark .hamburger-btn span {
+    background: #60a5fa;
+}
+
+body.dark .sidebar-overlay.show {
+    background: rgba(0, 0, 0, .5);
+}
+
 /* =====================================================
    MODERN DARK MODE
 ===================================================== */
@@ -1890,4 +1903,1228 @@ body:not(.dark) .topbar{
         padding:20px;
     }
 
+}
+
+/* ===============================
+   MOBILE NAVIGATION - MINIMAL
+================================*/
+
+/* Hamburger Button - Only visible on mobile */
+.hamburger-btn {
+    display: none;
+    flex-direction: column;
+    width: 32px;
+    height: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    gap: 5px;
+    padding: 0;
+    border-radius: 4px;
+    transition: .3s ease;
+    align-items: center;
+    justify-content: center;
+}
+
+.hamburger-btn span {
+    width: 24px;
+    height: 2px;
+    background: #2563eb;
+    border-radius: 2px;
+    transition: .3s ease;
+    display: block;
+}
+
+.hamburger-btn.active span:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+}
+
+.hamburger-btn.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-btn.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Sidebar Overlay - Mobile only */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0);
+    z-index: 9997;
+    transition: background .3s ease;
+    pointer-events: none;
+}
+
+.sidebar-overlay.show {
+    display: block;
+    background: rgba(0, 0, 0, .4);
+    pointer-events: auto;
+}
+
+/* ===============================
+   MOBILE RESPONSIVE - COMPREHENSIVE
+================================*/
+
+/* Tablet (769px - 1024px) */
+@media (max-width:1024px){
+    .sidebar{
+        width:220px;
+        padding:20px 16px;
+    }
+
+    .content{
+        padding:30px 25px;
+    }
+
+    .stats-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:18px;
+    }
+
+    .dashboard-hero{
+        padding:35px;
+    }
+
+    .dashboard-title{
+        font-size:36px;
+    }
+
+    .btn{
+        padding:11px 22px;
+        font-size:15px;
+    }
+}
+
+/* Small Tablets & Large Mobile (641px - 768px) */
+@media (max-width:768px){
+    /* Show hamburger button on mobile */
+    .hamburger-btn {
+        display: flex;
+        margin-right: 12px;
+    }
+
+    /* Mobile sidebar behavior */
+    .app-layout{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        position:fixed;
+        left:-280px;
+        top:0;
+        width:280px;
+        height:100vh;
+        z-index:9998;
+        border-right:1px solid #e2e8f0;
+        border-bottom:none;
+        overflow-y:auto;
+        overflow-x:hidden;
+        transition:.35s ease;
+        box-shadow:2px 0 10px rgba(0,0,0,.1);
+    }
+
+    .sidebar.show{
+        left:0;
+    }
+
+    .content{
+        padding:20px 16px;
+        flex:1;
+        width:100%;
+    }
+
+    /* Rest of mobile optimizations remain the same... */
+        transition:.3s ease;
+    }
+
+    .menu-toggle.active span:nth-child(1){
+        transform:rotate(45deg) translate(8px,8px);
+    }
+
+    .menu-toggle.active span:nth-child(2){
+        opacity:0;
+    }
+
+    .menu-toggle.active span:nth-child(3){
+        transform:rotate(-45deg) translate(8px,-8px);
+    }
+
+    /* Dashboard */
+    .dashboard-hero{
+        padding:28px 20px;
+        margin-bottom:25px;
+    }
+
+    .dashboard-title{
+        font-size:28px;
+        line-height:1.3;
+    }
+
+    .dashboard-subtitle{
+        font-size:16px;
+        margin-bottom:20px;
+    }
+
+    .hero-actions{
+        flex-direction:column;
+        gap:12px;
+    }
+
+    /* Stats Grid */
+    .stats-grid{
+        grid-template-columns:1fr;
+        gap:16px;
+        margin-bottom:25px;
+    }
+
+    .stat-card{
+        padding:20px;
+    }
+
+    .stat-title{
+        font-size:13px;
+    }
+
+    .stat-value{
+        font-size:28px;
+    }
+
+    /* Cards */
+    .card-custom,
+    .quick-card,
+    .analytics-card,
+    .assessment-card,
+    .history-card,
+    .leader-card,
+    .question-card,
+    .score-card,
+    .feedback-card,
+    .answer-card,
+    .viva-card{
+        padding:20px;
+        border-radius:18px;
+        margin-bottom:16px;
+    }
+
+    .card-icon{
+        width:48px;
+        height:48px;
+        font-size:22px;
+    }
+
+    /* Typography */
+    .card-custom h2,
+    .quick-card h2,
+    .analytics-card h2,
+    .assessment-card h2{
+        font-size:24px;
+        margin-top:8px;
+    }
+
+    .card-custom h3,
+    .quick-card h3,
+    .analytics-card h3{
+        font-size:18px;
+        margin-bottom:12px;
+    }
+
+    h1{
+        font-size:28px !important;
+    }
+
+    h2{
+        font-size:22px !important;
+    }
+
+    h3{
+        font-size:18px !important;
+    }
+
+    /* Forms */
+    .form-control,
+    .form-select,
+    textarea{
+        height:48px;
+        font-size:16px;
+        padding:12px 14px;
+        border-radius:12px;
+    }
+
+    textarea{
+        height:120px;
+        min-height:120px;
+    }
+
+    .form-label{
+        font-size:14px;
+        margin-bottom:8px;
+    }
+
+    .generate-btn{
+        height:50px;
+        font-size:15px;
+        width:100%;
+    }
+
+    /* Buttons */
+    .btn{
+        width:100%;
+        padding:12px 20px;
+        font-size:14px;
+        min-height:44px;
+        border-radius:12px;
+    }
+
+    .btn-primary,
+    .btn-outline-primary{
+        width:100%;
+    }
+
+    .hero-actions .btn{
+        width:100%;
+    }
+
+    /* Quiz */
+    .quiz-header{
+        flex-direction:column;
+        gap:16px;
+    }
+
+    .quiz-title{
+        font-size:26px;
+    }
+
+    .quiz-subtitle{
+        font-size:14px;
+    }
+
+    .timer-card{
+        width:100%;
+        padding:16px 20px;
+    }
+
+    .timer-card span{
+        font-size:24px;
+    }
+
+    .question-card{
+        padding:20px;
+    }
+
+    .question-text{
+        font-size:17px;
+        line-height:1.5;
+    }
+
+    .option-box{
+        padding:14px 16px;
+        margin-top:12px;
+        font-size:15px;
+    }
+
+    .option-box input{
+        margin-right:12px;
+    }
+
+    /* Results */
+    .result-hero{
+        padding:28px 20px;
+        text-align:center;
+    }
+
+    .result-hero h1{
+        font-size:32px;
+    }
+
+    .result-hero p{
+        font-size:15px;
+    }
+
+    .score-card{
+        padding:20px;
+    }
+
+    .score-card h2{
+        font-size:32px;
+    }
+
+    /* Tables */
+    .table{
+        font-size:13px;
+    }
+
+    .table thead th{
+        padding:14px;
+        font-size:12px;
+    }
+
+    .table tbody td{
+        padding:12px;
+        font-size:13px;
+    }
+
+    .table-responsive{
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+    }
+
+    /* History & Leaderboard */
+    .history-card,
+    .leader-card{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+        padding:16px;
+    }
+
+    .history-topic,
+    .leader-name{
+        font-size:16px;
+    }
+
+    .history-score,
+    .leader-score{
+        font-size:24px;
+    }
+
+    .rank{
+        width:48px;
+        height:48px;
+        font-size:18px;
+    }
+
+    /* Chart */
+    .chart-container{
+        height:280px;
+    }
+
+    /* Topbar - Keep visible on mobile */
+    .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    /* Sidebar Menu */
+    .menu{
+        gap:8px;
+    }
+
+    .menu a{
+        padding:12px 14px;
+        font-size:14px;
+        border-radius:12px;
+    }
+
+    .logo-container{
+        margin-bottom:30px;
+    }
+
+    .sidebar-logo{
+        width:48px;
+        height:48px;
+    }
+
+    .logo{
+        font-size:28px;
+    }
+
+    .tagline{
+        font-size:12px;
+    }
+
+    /* Buttons at bottom */
+    .sidebar-bottom .theme-btn,
+    .sidebar-bottom .logout-btn{
+        padding:12px;
+        font-size:14px;
+    }
+
+    /* Achievement */
+    .achievement-card{
+        padding:30px 20px;
+    }
+
+    .achievement-card h2{
+        font-size:28px;
+    }
+
+    /* Viva */
+    .viva-card{
+        padding:24px 16px;
+    }
+
+    .viva-card h1{
+        font-size:28px;
+    }
+
+    .viva-card h2{
+        font-size:22px;
+    }
+
+    .ai-feedback{
+        padding:16px;
+        margin-top:16px;
+    }
+
+    /* Empty State */
+    .empty-card{
+        padding:50px 20px;
+    }
+
+    .empty-card h2{
+        font-size:22px;
+    }
+
+    .empty-card p{
+        font-size:14px;
+    }
+}
+
+/* Mobile Phones (481px - 640px) */
+@media (max-width:640px){
+    body{
+        font-size:14px;
+    }
+
+    .sidebar{
+        width:260px;
+    }
+
+    .content{
+        padding:16px 12px;
+    }
+
+    .dashboard-hero{
+        padding:24px 16px;
+        margin-bottom:20px;
+    }
+
+    .dashboard-title{
+        font-size:24px;
+    }
+
+    .stats-grid{
+        gap:12px;
+    }
+
+    .stat-card{
+        padding:16px;
+    }
+
+    .stat-value{
+        font-size:26px;
+    }
+
+    .card-custom,
+    .quick-card,
+    .history-card,
+    .leader-card{
+        padding:16px;
+        margin-bottom:12px;
+    }
+
+    .btn{
+        padding:11px 18px;
+        font-size:13px;
+        min-height:40px;
+    }
+
+    .form-control,
+    .form-select{
+        font-size:15px;
+    }
+
+    .quiz-title{
+        font-size:22px;
+    }
+
+    .question-text{
+        font-size:16px;
+    }
+
+    .result-hero h1{
+        font-size:28px;
+    }
+
+    .score-card h2{
+        font-size:28px;
+    }
+
+    .topbar h4{
+        font-size:18px;
+    }
+
+    .menu a{
+        padding:10px 12px;
+        font-size:13px;
+    }
+}
+
+/* Small Mobile Phones (max-width:480px) */
+@media (max-width:480px){
+    * {
+        -webkit-tap-highlight-color:transparent;
+    }
+
+    body{
+        font-size:13px;
+    }
+
+    html{
+        font-size:13px;
+    }
+
+    .app-layout{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        position:fixed;
+        left:-100%;
+        width:75vw;
+        max-width:280px;
+        height:100vh;
+        top:0;
+    }
+
+    .sidebar.show{
+        left:0;
+    }
+
+    .content{
+        padding:12px;
+    }
+
+    /* Top Navigation */
+    .topbar{
+        gap:12px;
+        margin-bottom:16px;
+        padding-bottom:12px;
+    }
+
+    .topbar h4{
+        font-size:16px;
+    }
+
+    .topbar small{
+        font-size:12px;
+    }
+
+    /* Hero Section */
+    .dashboard-hero{
+        padding:20px;
+        margin-bottom:16px;
+        border-radius:16px;
+    }
+
+    .dashboard-title{
+        font-size:22px;
+        margin-bottom:12px;
+    }
+
+    .dashboard-subtitle{
+        font-size:14px;
+        margin-bottom:16px;
+        line-height:1.6;
+    }
+
+    .hero-actions{
+        flex-direction:column;
+        gap:10px;
+    }
+
+    .hero-actions .btn{
+        width:100%;
+        padding:10px 16px;
+    }
+
+    /* Stats Grid */
+    .stats-grid{
+        grid-template-columns:1fr;
+        gap:12px;
+        margin-bottom:20px;
+    }
+
+    .stat-card{
+        padding:16px;
+        border-radius:14px;
+    }
+
+    .stat-title{
+        font-size:12px;
+    }
+
+    .stat-value{
+        font-size:24px;
+    }
+
+    /* Cards */
+    .card-custom,
+    .quick-card,
+    .analytics-card,
+    .history-card,
+    .leader-card,
+    .question-card,
+    .score-card,
+    .feedback-card,
+    .answer-card,
+    .viva-card,
+    .stat-card{
+        padding:14px;
+        border-radius:14px;
+        margin-bottom:12px;
+        box-shadow:0 2px 8px rgba(15,23,42,.04);
+    }
+
+    .card-custom:hover,
+    .quick-card:hover,
+    .question-card:hover{
+        transform:translateY(-2px);
+        box-shadow:0 6px 16px rgba(15,23,42,.08);
+    }
+
+    /* Card Content */
+    .card-custom h2,
+    .quick-card h2,
+    .analytics-card h2{
+        font-size:20px;
+        margin-top:6px;
+    }
+
+    .card-custom h3{
+        font-size:16px;
+        margin-bottom:10px;
+    }
+
+    .card-custom p,
+    .quick-card p{
+        font-size:13px;
+        line-height:1.5;
+    }
+
+    .card-icon{
+        width:40px;
+        height:40px;
+        font-size:18px;
+        margin-bottom:12px;
+    }
+
+    /* Typography */
+    h1{
+        font-size:24px !important;
+    }
+
+    h2{
+        font-size:20px !important;
+    }
+
+    h3{
+        font-size:16px !important;
+    }
+
+    h4{
+        font-size:15px !important;
+    }
+
+    h5{
+        font-size:14px !important;
+    }
+
+    h6{
+        font-size:13px !important;
+    }
+
+    p{
+        font-size:13px;
+        line-height:1.5;
+    }
+
+    /* Forms */
+    .form-label{
+        font-size:13px;
+        margin-bottom:6px;
+        font-weight:600;
+    }
+
+    .form-control,
+    .form-select,
+    textarea{
+        height:44px;
+        font-size:16px;
+        padding:10px 12px;
+        border-radius:10px;
+        border:1px solid #dbe4ee;
+    }
+
+    textarea{
+        height:100px;
+        min-height:100px;
+        padding:10px 12px;
+    }
+
+    .form-control::placeholder{
+        font-size:14px;
+    }
+
+    .form-control:focus,
+    .form-select:focus{
+        border-color:#2563eb;
+        box-shadow:0 0 0 3px rgba(37,99,235,.08);
+    }
+
+    /* Buttons */
+    .btn{
+        padding:10px 16px;
+        font-size:13px;
+        min-height:40px;
+        width:100%;
+        border-radius:10px;
+        font-weight:600;
+    }
+
+    .btn:active{
+        transform:translateY(0);
+    }
+
+    .btn-primary{
+        background:#2563eb;
+        color:white;
+    }
+
+    .btn-primary:active{
+        background:#1d4ed8;
+    }
+
+    .generate-btn{
+        height:44px;
+        font-size:14px;
+    }
+
+    .theme-btn,
+    .logout-btn{
+        padding:10px;
+        font-size:13px;
+        width:100%;
+    }
+
+    /* Quiz */
+    .quiz-header{
+        flex-direction:column;
+        gap:12px;
+        margin-bottom:20px;
+    }
+
+    .quiz-title{
+        font-size:20px;
+        margin-bottom:4px;
+    }
+
+    .quiz-subtitle{
+        font-size:13px;
+    }
+
+    .timer-card{
+        padding:12px 16px;
+        width:100%;
+    }
+
+    .timer-card span{
+        font-size:20px;
+    }
+
+    .question-number{
+        width:36px;
+        height:36px;
+        font-size:13px;
+        margin-right:10px;
+    }
+
+    .question-card{
+        padding:14px;
+        margin-bottom:12px;
+    }
+
+    .question-text{
+        font-size:15px;
+        line-height:1.5;
+        margin:0;
+    }
+
+    .option-box{
+        padding:12px 14px;
+        margin-top:10px;
+        font-size:13px;
+        border-radius:10px;
+    }
+
+    .option-box input{
+        margin-right:10px;
+        transform:scale(1);
+    }
+
+    .option-box label{
+        font-size:13px;
+    }
+
+    /* Results */
+    .result-hero{
+        padding:20px;
+        margin-bottom:16px;
+        border-radius:16px;
+    }
+
+    .result-hero h1{
+        font-size:26px;
+        margin-bottom:8px;
+    }
+
+    .result-hero p{
+        font-size:13px;
+    }
+
+    .score-card{
+        padding:14px;
+        text-align:center;
+    }
+
+    .score-card h6{
+        font-size:12px;
+    }
+
+    .score-card h2{
+        font-size:26px;
+    }
+
+    /* Tables */
+    .table{
+        font-size:12px;
+    }
+
+    .table thead th{
+        padding:10px 8px;
+        font-size:11px;
+        font-weight:600;
+    }
+
+    .table tbody td{
+        padding:10px 8px;
+        font-size:12px;
+    }
+
+    /* History */
+    .history-card{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding:12px;
+    }
+
+    .history-topic{
+        font-size:14px;
+    }
+
+    .history-date{
+        font-size:12px;
+    }
+
+    .history-score{
+        font-size:20px;
+    }
+
+    /* Leaderboard */
+    .leader-card{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:8px;
+        padding:12px;
+    }
+
+    .rank{
+        width:44px;
+        height:44px;
+        font-size:16px;
+        flex-shrink:0;
+    }
+
+    .leader-name{
+        font-size:14px;
+    }
+
+    .leader-topic{
+        font-size:11px;
+    }
+
+    .leader-score{
+        font-size:18px;
+        flex-shrink:0;
+    }
+
+    /* Chart */
+    .chart-container{
+        height:220px;
+    }
+
+    /* Sidebar */
+    .sidebar{
+        max-width:70vw;
+    }
+
+    .logo-container{
+        margin-bottom:20px;
+    }
+
+    .sidebar-logo{
+        width:40px;
+        height:40px;
+    }
+
+    .logo{
+        font-size:22px;
+    }
+
+    .tagline{
+        font-size:11px;
+    }
+
+    .menu{
+        gap:6px;
+    }
+
+    .menu a{
+        padding:10px 12px;
+        font-size:13px;
+        border-radius:10px;
+    }
+
+    .sidebar-bottom{
+        margin-top:auto;
+    }
+
+    .theme-btn,
+    .logout-btn{
+        padding:10px;
+        font-size:12px;
+        border-radius:10px;
+    }
+
+    /* Achievement */
+    .achievement-card{
+        padding:24px 16px;
+        margin:20px 0;
+        border-radius:16px;
+    }
+
+    .achievement-card h4{
+        font-size:14px;
+    }
+
+    .achievement-card h2{
+        font-size:24px;
+    }
+
+    /* Viva */
+    .viva-card{
+        padding:16px;
+    }
+
+    .viva-card h1{
+        font-size:22px;
+        margin-bottom:8px;
+    }
+
+    .viva-card h2{
+        font-size:18px;
+        margin-bottom:12px;
+    }
+
+    .viva-card h5{
+        font-size:14px;
+    }
+
+    .viva-card p{
+        font-size:13px;
+        line-height:1.5;
+    }
+
+    .ai-feedback{
+        padding:12px;
+        border-left-width:4px;
+        border-radius:10px;
+        margin-top:12px;
+    }
+
+    .ai-feedback h4{
+        font-size:13px;
+        margin-bottom:8px;
+    }
+
+    .ai-feedback p{
+        font-size:12px;
+        line-height:1.5;
+    }
+
+    /* Empty State */
+    .empty-card{
+        padding:40px 16px;
+    }
+
+    .empty-card h2{
+        font-size:18px;
+    }
+
+    .empty-card p{
+        font-size:13px;
+    }
+
+    /* Badges */
+    .badge{
+        padding:6px 12px;
+        font-size:11px;
+        border-radius:8px;
+    }
+
+    /* Answer Card */
+    .answer-card{
+        padding:12px;
+    }
+
+    .answer-card h5{
+        font-size:14px;
+        margin-bottom:8px;
+    }
+
+    .answer-card p{
+        font-size:12px;
+        margin-bottom:8px;
+        line-height:1.5;
+    }
+
+    /* Skill Card */
+    .skill-card{
+        padding:16px;
+        margin-bottom:12px;
+        border-left-width:4px;
+    }
+
+    .skill-card h4{
+        font-size:16px;
+    }
+
+    /* Feedback */
+    .feedback-card{
+        padding:14px;
+    }
+
+    .feedback-card h2{
+        font-size:18px;
+        margin-bottom:12px;
+    }
+
+    .feedback-card p{
+        font-size:13px;
+        line-height:1.6;
+    }
+}
+
+/* Extra Small Devices (max-width:360px) */
+@media (max-width:360px){
+    .sidebar{
+        max-width:85vw;
+    }
+
+    .content{
+        padding:10px;
+    }
+
+    .dashboard-hero{
+        padding:16px;
+    }
+
+    .card-custom,
+    .quick-card,
+    .history-card,
+    .leader-card{
+        padding:12px;
+    }
+
+    .btn{
+        padding:9px 14px;
+        font-size:12px;
+    }
+
+    .dashboard-title{
+        font-size:20px;
+    }
+
+    .stat-value{
+        font-size:22px;
+    }
+}
+
+/* TOUCH-FRIENDLY IMPROVEMENTS */
+@media (hover:none) and (pointer:coarse){
+    .btn,
+    .menu a,
+    .card-custom,
+    .quick-card,
+    .option-box,
+    .history-card,
+    .leader-card{
+        min-height:44px;
+        min-width:44px;
+    }
+
+    .option-box,
+    .btn,
+    .menu a{
+        padding:12px 14px;
+    }
+
+    .btn:active{
+        transform:scale(0.98);
+    }
+
+    .card-custom:active,
+    .quick-card:active,
+    .history-card:active,
+    .leader-card:active{
+        transform:scale(0.99);
+    }
+
+    .form-control,
+    .form-select,
+    textarea{
+        font-size:16px;
+    }
+
+    /* Remove hover effects on touch devices */
+    .menu a:hover{
+        background:#eef4ff;
+        transform:translateX(0);
+    }
+
+    .card-custom:hover,
+    .quick-card:hover{
+        transform:translateY(0);
+    }
+
+    /* Better touch targets */
+    input[type="radio"],
+    input[type="checkbox"]{
+        width:20px;
+        height:20px;
+        cursor:pointer;
+    }
 }
