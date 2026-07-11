@@ -135,54 +135,43 @@
 
         <!-- Topbar -->
 
-        <div class="topbar mb-4">
+<div class="topbar mb-4">
 
-            <!-- Mobile Hamburger Button -->
-            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+    <!-- Left -->
+    <div class="topbar-left">
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
 
-            <div>
+    <!-- Center -->
+    <div class="topbar-center">
 
-                <h4 class="mb-0">
+        <h4 class="mb-0">
+            {% block page_title %}
+            Learning Dashboard
+            {% endblock %}
+        </h4>
 
-                    {% block page_title %}
-                    Learning Dashboard
-                    {% endblock %}
+        <small class="text-secondary">
+            {% block page_subtitle %}
+            Track progress and improve performance
+            {% endblock %}
+        </small>
 
-                </h4>
+    </div>
 
-                <small class="text-secondary">
-
-                    {% block page_subtitle %}
-                    Track progress and improve performance
-                    {% endblock %}
-
-                </small>
-
-            </div>
-
-            {% if session.username %}
-
-            <div class="user-info">
-
-                Welcome,
-                <strong>{{ session.username }}</strong>
-
-            </div>
-
-            {% endif %}
-
+    <!-- Right -->
+    <div class="topbar-right">
+        {% if session.username %}
+        <div class="user-info">
+            Welcome,
+            <strong>{{ session.username }}</strong>
         </div>
-
-        <!-- Page Content -->
-
-        {% block content %}
-        {% endblock %}
-
-    </main>
+        {% endif %}
+    </div>
 
 </div>
 

@@ -2305,15 +2305,39 @@ body:not(.dark) .topbar{
         height:280px;
     }
 
-    /* Topbar - Keep visible on mobile */
-    .topbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-    }
+/* Topbar - Mobile */
+.topbar {
+    display: grid;
+    grid-template-columns: 50px 1fr 50px;
+    align-items: center;
+    gap: 0;
+}
 
+.topbar-left {
+    justify-self: start;
+}
+
+.topbar-center {
+    text-align: center;
+}
+
+.topbar-center h4 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.topbar-center small {
+    display: block;
+    font-size: 12px;
+}
+
+.topbar-right {
+    justify-self: end;
+}
+
+.user-info {
+    display: none;
+}
     /* Sidebar Menu */
     .menu{
         gap:8px;
