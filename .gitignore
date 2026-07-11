@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+
+# Environment Variables
+.env
+
+# Database
+quiz_history.db
+
+# VS Code
+.vscode/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+database_backup.py
+test.py
+view_history.py

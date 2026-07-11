@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}
+Assessment Result
+{% endblock %}
+
+{% block content %}
+
+<!-- RESULT HEADER -->
+
+<div class="result-hero mb-5">
+
+<div class="text-center">
+
+    <span class="hero-tag">
+        Assessment Completed
+    </span>
+
+    <h1 class="result-score mt-3">
+        {{ percentage }}%
+    </h1>
+
+    <h3 class="mt-3">
+        {{ achievement }}
+    </h3>
+
+    <p class="dashboard-subtitle mt-3">
+        Review your assessment performance and personalized learning recommendations.
+    </p>
+
+</div>
+
+</div>
+
+<!-- PERFORMANCE METRICS -->
+
+<div class="row g-4 mb-4">
+
+<div class="col-md-3">
+
+    <div class="metric-card text-center">
+
+        <small class="text-secondary">
+            Correct Answers
+        </small>
+
+        <h2>
+            {{ score }}
+        </h2>
+
+    </div>
+
+</div>
+
+<div class="col-md-3">
+
+    <div class="metric-card text-center">
+
+        <small class="text-secondary">
+            Incorrect Answers
+        </small>
+
+        <h2>
+            {{ wrong }}
+        </h2>
+
+    </div>
+
+</div>
+
+<div class="col-md-3">
+
+    <div class="metric-card text-center">
+
+        <small class="text-secondary">
+            XP Earned
+        </small>
+
+        <h2>
+            {{ xp }}
+        </h2>
+
+    </div>
+
+</div>
+
+<div class="col-md-3">
+
+    <div class="metric-card text-center">
+
+        <small class="text-secondary">
+            Current Level
+        </small>
+
+        <h2>
+            {{ level }}
+        </h2>
+
+    </div>
+
+</div>
+
+</div>
+
+<!-- PERFORMANCE BAR -->
+
+<div class="card-custom mb-4">
+
+<h4 class="mb-3">
+    Overall Performance
+</h4>
+
+<div class="progress">
+
+    <div
+        class="progress-bar"
+        role="progressbar"
+        style="width: {{ percentage }}%;">
+
+    </div>
+
+</div>
+
+<p class="mt-3 mb-0 text-secondary">
+    {{ message }}
+</p>
+
+</div>
+
+<!-- AI FEEDBACK -->
+
+<div class="card-custom mb-4">
+
+<h3 class="mb-4">
+    Learning Insights
+</h3>
+
+<div style="white-space: pre-line;">
+
+    {{ feedback }}
+
+</div>
+
+</div>
+
+<!-- ANSWER REVIEW -->
+
+<div class="card-custom">
+
+<h3 class="mb-4">
+    Answer Review
+</h3>
+
+{% for item in results %}
+
+<div class="review-card mb-3">
+
+    <h5 class="mb-3">
+
+        {{ item.question }}
+
+    </h5>
+
+    <p>
+
+        <strong>
+            Your Answer:
+        </strong>
+
+        {{ item.user_answer }}
+
+    </p>
+
+    <p>
+
+        <strong>
+            Correct Answer:
+        </strong>
+
+        {{ item.correct_answer }}
+
+    </p>
+
+    {% if item.is_correct %}
+
+        <span class="status-badge excellent">
+            Correct
+        </span>
+
+    {% else %}
+
+        <span class="status-badge improve">
+            Incorrect
+        </span>
+
+    {% endif %}
+
+</div>
+
+{% endfor %}
+
+<a href="/"
+   class="btn btn-primary mt-4">
+
+    Return to Dashboard
+
+</a>
+
+</div>
+
+{% endblock %}

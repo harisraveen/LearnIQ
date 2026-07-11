@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}
+Viva Evaluation
+{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+
+<div class="result-hero mb-5">
+
+    <div class="text-center">
+
+        <span class="hero-tag">
+            AI Evaluation Report
+        </span>
+
+        <h1 class="dashboard-title mt-3">
+            Viva Assessment Completed
+        </h1>
+
+        <p class="dashboard-subtitle mt-3">
+            Review your response and AI-generated evaluation feedback.
+        </p>
+
+    </div>
+
+</div>
+
+<!-- QUESTION & ANSWER -->
+
+<div class="row g-4 mb-4">
+
+    <div class="col-lg-6">
+
+        <div class="evaluation-card">
+
+            <h4 class="mb-3">
+                Assessment Topic
+            </h4>
+
+            <p class="topic-label">
+                {{ topic }}
+            </p>
+
+            <hr>
+
+            <h4 class="mb-3">
+                Question
+            </h4>
+
+            <p>
+                {{ question }}
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+
+        <div class="evaluation-card">
+
+            <h4 class="mb-3">
+                Your Response
+            </h4>
+
+            <div class="answer-box">
+
+                {{ answer }}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- AI FEEDBACK -->
+
+<div class="evaluation-card mb-4">
+
+    <h3 class="mb-4">
+        AI Evaluation
+    </h3>
+
+    <div
+        style="white-space: pre-line; line-height:1.8;">
+
+        {{ feedback }}
+
+    </div>
+
+</div>
+
+<!-- ACTIONS -->
+
+<div class="card-custom text-center">
+
+    <a href="/viva"
+       class="btn btn-primary">
+
+        Start New Assessment
+
+    </a>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,289 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="analytics-header mb-5">
+
+    <div>
+
+        <span class="section-tag">
+            Learning Analytics
+        </span>
+
+        <h1 class="analytics-title">
+            Performance Dashboard
+        </h1>
+
+        <p class="analytics-subtitle">
+            Monitor assessment performance, learning progress and AI-generated insights.
+        </p>
+
+    </div>
+
+</div>
+
+<!-- KPI CARDS -->
+
+<div class="row g-4 mb-4">
+
+    <div class="col-md-3">
+        <div class="metric-card">
+            <span>Total Assessments</span>
+            <h2>{{ stats.total_quizzes }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="metric-card">
+            <span>Average Score</span>
+            <h2>{{ stats.average_score }}%</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="metric-card">
+            <span>Highest Score</span>
+            <h2>{{ stats.highest_score }}%</h2>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="metric-card">
+            <span>Lowest Score</span>
+            <h2>{{ stats.lowest_score }}%</h2>
+        </div>
+    </div>
+
+</div>
+
+<!-- MAIN GRID -->
+
+<div class="row g-4 mb-4">
+
+    <div class="col-lg-8">
+
+        <div class="analytics-card">
+
+            <h4>
+                Learning Progress
+            </h4>
+
+            <p class="text-secondary">
+                Based on average assessment performance.
+            </p>
+
+            <div class="progress modern-progress mt-4">
+
+                <div class="progress-bar"
+                     style="width:{{ stats.average_score }}%">
+
+                </div>
+
+            </div>
+
+            <h3 class="mt-3">
+                {{ stats.average_score }}%
+            </h3>
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-4">
+
+        <div class="analytics-card">
+
+            <h4>
+                Latest Topic
+            </h4>
+
+            <h2 class="mt-4">
+                {{ stats.latest_topic }}
+            </h2>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="analytics-card mb-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h4>
+                Performance Trend
+            </h4>
+
+            <p class="text-secondary mb-0">
+                Assessment performance over time
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="chart-wrapper">
+
+        <canvas id="performanceChart"></canvas>
+
+    </div>
+
+</div>
+
+<!-- INSIGHTS -->
+
+<div class="row g-4">
+
+    <div class="col-lg-6">
+
+        <div class="analytics-card">
+
+            <h4>
+                Strong Topics
+            </h4>
+
+            <hr>
+
+            {% if strong_topics %}
+
+                <ul>
+
+                    {% for topic in strong_topics %}
+                    <li>{{ topic }}</li>
+                    {% endfor %}
+
+                </ul>
+
+            {% else %}
+
+                <p class="text-secondary">
+                    No strong topics identified.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <div class="col-lg-6">
+
+        <div class="analytics-card">
+
+            <h4>
+                Improvement Areas
+            </h4>
+
+            <hr>
+
+            {% if weak_topics %}
+
+                <ul>
+
+                    {% for topic in weak_topics %}
+                    <li>{{ topic }}</li>
+                    {% endfor %}
+
+                </ul>
+
+            {% else %}
+
+                <p class="text-secondary">
+                    No improvement areas detected.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ROADMAP -->
+
+<div class="analytics-card mt-4">
+
+    <h4>
+        Personalized Learning Roadmap
+    </h4>
+
+    <hr>
+
+    <div style="white-space: pre-line;">
+        {{ roadmap }}
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const chartCtx =
+document.getElementById('performanceChart');
+
+new Chart(chartCtx,{
+
+    type:'line',
+
+    data:{
+
+        labels:[
+            'Quiz 1',
+            'Quiz 2',
+            'Quiz 3',
+            'Quiz 4',
+            'Quiz 5'
+        ],
+
+        datasets:[{
+
+            data:[
+                45,
+                60,
+                70,
+                82,
+                {{ stats.average_score }}
+            ],
+
+            borderColor:'#2563eb',
+
+            backgroundColor:'rgba(37,99,235,0.08)',
+
+            fill:true,
+
+            tension:.4,
+
+            borderWidth:3
+
+        }]
+
+    },
+
+    options:{
+
+        plugins:{
+            legend:{
+                display:false
+            }
+        },
+
+        responsive:true,
+
+        maintainAspectRatio:false
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}
+Leaderboard
+{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+
+<div class="analytics-header mb-5">
+
+    <span class="hero-tag">
+        Performance Rankings
+    </span>
+
+    <h1 class="dashboard-title">
+        Leaderboard
+    </h1>
+
+    <p class="dashboard-subtitle">
+        View top assessment performances across all recorded attempts.
+    </p>
+
+</div>
+
+<!-- TOP 3 PERFORMERS -->
+
+{% if leaderboard|length >= 3 %}
+
+<div class="row g-4 mb-5">
+
+    <div class="col-md-4">
+
+        <div class="leader-card second-place">
+
+            <div class="rank-number">
+                #2
+            </div>
+
+            <h4>
+                {{ leaderboard[1][0] }}
+            </h4>
+
+            <p class="text-secondary">
+                {{ leaderboard[1][2] }}
+            </p>
+
+            <h2>
+                {{ leaderboard[1][1] }}%
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="leader-card first-place">
+
+            <div class="rank-number">
+                #1
+            </div>
+
+            <h4>
+                {{ leaderboard[0][0] }}
+            </h4>
+
+            <p class="text-secondary">
+                {{ leaderboard[0][2] }}
+            </p>
+
+            <h2>
+                {{ leaderboard[0][1] }}%
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="leader-card third-place">
+
+            <div class="rank-number">
+                #3
+            </div>
+
+            <h4>
+                {{ leaderboard[2][0] }}
+            </h4>
+
+            <p class="text-secondary">
+                {{ leaderboard[2][2] }}
+            </p>
+
+            <h2>
+                {{ leaderboard[2][1] }}%
+            </h2>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+<!-- ALL RANKINGS -->
+
+<div class="card-custom">
+
+    <h3 class="mb-4">
+        All Rankings
+    </h3>
+
+    <div class="table-responsive">
+
+        <table class="table align-middle">
+
+            <thead>
+
+                <tr>
+
+                    <th>Rank</th>
+                    <th>Topic</th>
+                    <th>Performance</th>
+                    <th>Score</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for item in leaderboard %}
+
+                <tr>
+
+                    <td>
+
+                        <strong>
+                            #{{ loop.index }}
+                        </strong>
+
+                    </td>
+
+                    <td>
+
+                        <div>
+
+                            <strong>
+                                {{ item[0] }}
+                            </strong>
+
+                            <br>
+
+                            <small class="text-secondary">
+                                {{ item[2] }}
+                            </small>
+
+                        </div>
+
+                    </td>
+
+                    <td style="width:250px;">
+
+                        <div class="progress">
+
+                            <div
+                                class="progress-bar"
+                                role="progressbar"
+                                style="width: {{ item[1] }}%;">
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                    <td>
+
+                        <strong>
+                            {{ item[1] }}%
+                        </strong>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

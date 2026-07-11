@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}
+Viva Assessment
+{% endblock %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+
+<div class="dashboard-hero mb-4">
+
+    <div class="hero-left">
+
+        <span class="hero-tag">
+            AI Concept Assessment
+        </span>
+
+        <h1 class="dashboard-title">
+            AI Viva Assessment
+        </h1>
+
+        <p class="dashboard-subtitle">
+            Test your conceptual understanding through AI-generated viva questions.
+            Choose a topic, select difficulty, and begin your assessment journey.
+        </p>
+
+    </div>
+
+</div>
+
+<!-- FEATURE CARDS -->
+
+<div class="row g-4 mb-4">
+
+    <div class="col-md-4">
+
+        <div class="quick-card">
+
+            <h4>
+                Concept Testing
+            </h4>
+
+            <p>
+                Assess your understanding with open-ended technical questions.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="quick-card">
+
+            <h4>
+                AI Generated
+            </h4>
+
+            <p>
+                Receive unique questions generated dynamically for your topic.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="quick-card">
+
+            <h4>
+                Interview Ready
+            </h4>
+
+            <p>
+                Improve confidence for academic vivas and technical interviews.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- VIVA BUILDER -->
+
+<div class="card-custom mb-4">
+
+    <h3 class="mb-3">
+        Start Viva Assessment
+    </h3>
+
+    <p class="text-secondary mb-4">
+        Enter a topic and select a difficulty level to generate an AI-powered viva question.
+    </p>
+
+    <form action="/start_viva" method="POST">
+
+        <div class="row">
+
+            <div class="col-md-8 mb-3">
+
+                <label class="form-label">
+                    Topic
+                </label>
+
+                <input
+                    type="text"
+                    name="topic"
+                    class="form-control"
+                    placeholder="Python, DBMS, Machine Learning, Data Science..."
+                    required>
+
+            </div>
+
+            <div class="col-md-4 mb-3">
+
+                <label class="form-label">
+                    Difficulty
+                </label>
+
+                <select
+                    name="difficulty"
+                    class="form-select">
+
+                    <option value="Easy">
+                        Easy
+                    </option>
+
+                    <option value="Medium" selected>
+                        Medium
+                    </option>
+
+                    <option value="Hard">
+                        Hard
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-primary mt-3">
+
+            Generate Viva Question
+
+        </button>
+
+    </form>
+
+</div>
+
+<!-- POPULAR TOPICS -->
+
+<div class="card-custom">
+
+    <h3 class="mb-4">
+        Suggested Topics
+    </h3>
+
+    <div class="row g-3">
+
+        <div class="col-md-3">
+
+            <div class="quick-card text-center">
+
+                <h6 class="mb-0">
+                    Python
+                </h6>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="quick-card text-center">
+
+                <h6 class="mb-0">
+                    DBMS
+                </h6>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="quick-card text-center">
+
+                <h6 class="mb-0">
+                    Machine Learning
+                </h6>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="quick-card text-center">
+
+                <h6 class="mb-0">
+                    Data Science
+                </h6>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

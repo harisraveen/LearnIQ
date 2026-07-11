@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}
+Assessment
+{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+
+<div class="d-flex justify-content-between align-items-center mb-5">
+
+<div>
+
+    <span class="hero-tag">
+        Assessment Session
+    </span>
+
+    <h1 class="dashboard-title">
+        {{ topic }}
+    </h1>
+
+    <p class="dashboard-subtitle">
+        Complete all questions before submitting your assessment.
+    </p>
+
+</div>
+
+<div class="timer-card">
+
+    <div class="timer-label">
+        Time Remaining
+    </div>
+
+    <div id="timer" class="timer-value">
+        05:00
+    </div>
+
+</div>
+
+</div>
+
+<form action="/result" method="POST">
+
+{% for q in questions %}
+
+{% set q_index = loop.index0 %}
+
+<div class="question-card mb-4">
+
+<div class="question-number">
+
+    Question {{ loop.index }}
+
+</div>
+
+<h4 class="question-title">
+
+    {{ q.question }}
+
+</h4>
+
+<div class="options-container">
+
+    {% for option in q.options %}
+
+    <label class="option-card">
+
+        <input
+            type="radio"
+            name="q{{ q_index }}"
+            value="{{ option }}"
+            required>
+
+        <span>
+
+            {{ option }}
+
+        </span>
+
+    </label>
+
+    {% endfor %}
+
+</div>
+
+</div>
+
+{% endfor %}
+
+<button class="btn btn-primary btn-lg w-100">
+
+Submit Assessment
+
+</button>
+
+</form>
+
+<script>
+
+let timeLeft = 300;
+
+const timer =
+document.getElementById("timer");
+
+const countdown =
+setInterval(() => {
+
+    let minutes =
+    Math.floor(timeLeft / 60);
+
+    let seconds =
+    timeLeft % 60;
+
+    timer.innerText =
+        String(minutes).padStart(2,'0')
+        + ":" +
+        String(seconds).padStart(2,'0');
+
+    timeLeft--;
+
+    if(timeLeft < 0){
+
+        clearInterval(countdown);
+
+        alert(
+            "Time expired. Assessment submitted."
+        );
+
+        document
+            .querySelector("form")
+            .submit();
+    }
+
+},1000);
+
+</script>
+
+{% endblock %}

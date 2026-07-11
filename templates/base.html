@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}LearnIQ{% endblock %}
+    </title>
+
+    <!-- Favicon -->
+    <link rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="{{ url_for('static', filename='logo_icon.png') }}">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Google Font -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="app-layout">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div>
+
+            <!-- Logo -->
+
+            <div class="logo-container">
+
+                <img src="{{ url_for('static', filename='logo_icon.png') }}"
+                     alt="LearnIQ Logo"
+                     class="sidebar-logo">
+
+                <div class="logo-text">
+
+                    <h3 class="logo">
+                        LearnIQ
+                    </h3>
+
+                    <p class="tagline">
+                        Learning Analytics Platform
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Navigation -->
+
+            <nav class="menu">
+
+                <a href="{{ url_for('home') }}"
+                   class="{% if request.endpoint=='home' %}active{% endif %}">
+                    Home
+                </a>
+
+                <a href="{{ url_for('dashboard') }}"
+                   class="{% if request.endpoint=='dashboard' %}active{% endif %}">
+                    Dashboard
+                </a>
+
+                <a href="{{ url_for('history') }}"
+                   class="{% if request.endpoint=='history' %}active{% endif %}">
+                    History
+                </a>
+
+                <a href="{{ url_for('leaderboard') }}"
+                   class="{% if request.endpoint=='leaderboard' %}active{% endif %}">
+                    Leaderboard
+                </a>
+
+                <a href="{{ url_for('viva') }}"
+                   class="{% if request.endpoint=='viva' %}active{% endif %}">
+                    Viva Assessment
+                </a>
+
+            </nav>
+
+        </div>
+
+        <!-- Bottom Buttons -->
+
+        <div class="sidebar-bottom">
+
+            <button id="themeToggle"
+                    class="theme-btn">
+
+                Dark Mode
+
+            </button>
+
+            <a href="{{ url_for('logout') }}"
+               class="logout-btn">
+
+                Logout
+
+            </a>
+
+        </div>
+
+    </aside>
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="content">
+
+        <!-- Topbar -->
+
+        <div class="topbar mb-4">
+
+            <div>
+
+                <h4 class="mb-0">
+
+                    {% block page_title %}
+                    Learning Dashboard
+                    {% endblock %}
+
+                </h4>
+
+                <small class="text-secondary">
+
+                    {% block page_subtitle %}
+                    Track progress and improve performance
+                    {% endblock %}
+
+                </small>
+
+            </div>
+
+            {% if session.username %}
+
+            <div class="user-info">
+
+                Welcome,
+                <strong>{{ session.username }}</strong>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        <!-- Page Content -->
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+</div>
+
+<!-- ================= DARK MODE ================= -->
+
+<script>
+
+const toggleBtn = document.getElementById("themeToggle");
+const body = document.body;
+
+// Load saved theme
+
+if(localStorage.getItem("theme") === "dark")
+{
+    body.classList.add("dark");
+    toggleBtn.innerHTML = "Light Mode";
+}
+
+// Toggle Theme
+
+toggleBtn.addEventListener("click", () => {
+
+    body.classList.toggle("dark");
+
+    if(body.classList.contains("dark"))
+    {
+        localStorage.setItem("theme","dark");
+        toggleBtn.innerHTML = "Light Mode";
+    }
+    else
+    {
+        localStorage.setItem("theme","light");
+        toggleBtn.innerHTML = "Dark Mode";
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>

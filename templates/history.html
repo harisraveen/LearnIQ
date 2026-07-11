@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}
+Assessment History
+{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+
+<div class="analytics-header mb-5">
+
+    <span class="hero-tag">
+        Assessment Records
+    </span>
+
+    <h1 class="dashboard-title">
+        Assessment History
+    </h1>
+
+    <p class="dashboard-subtitle">
+        Review previous assessments and track your learning progress over time.
+    </p>
+
+</div>
+
+{% if history %}
+
+<div class="row g-4">
+
+    {% for item in history %}
+
+    <div class="col-lg-6">
+
+        <div class="history-card">
+
+            <div class="d-flex justify-content-between align-items-start">
+
+                <div>
+
+                    <h4 class="mb-2">
+                        {{ item[1] }}
+                    </h4>
+
+                    <p class="history-date">
+                        {{ item[5] }}
+                    </p>
+
+                </div>
+
+                <div class="score-box">
+
+                    {{ item[4] }}%
+
+                </div>
+
+            </div>
+
+            <div class="mt-4">
+
+                {% if item[4] >= 80 %}
+
+                    <span class="status-badge excellent">
+                        Excellent
+                    </span>
+
+                {% elif item[4] >= 50 %}
+
+                    <span class="status-badge good">
+                        Good
+                    </span>
+
+                {% else %}
+
+                    <span class="status-badge improve">
+                        Needs Improvement
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+            <div class="progress mt-4">
+
+                <div
+                    class="progress-bar"
+                    role="progressbar"
+                    style="width: {{ item[4] }}%;">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% else %}
+
+<div class="card-custom text-center">
+
+    <h3>
+        No Assessment History Found
+    </h3>
+
+    <p class="text-secondary">
+        Complete assessments to build your learning record.
+    </p>
+
+</div>
+
+{% endif %}
+
+{% endblock %}
