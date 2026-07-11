@@ -43,7 +43,7 @@
 
 <div class="app-layout">
 
-    <!-- ================= SIDEBAR OVERLAY (Mobile Only) ================= -->
+    <!-- Mobile Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- ================= SIDEBAR ================= -->
@@ -113,16 +113,12 @@
 
             <button id="themeToggle"
                     class="theme-btn">
-
                 Dark Mode
-
             </button>
 
             <a href="{{ url_for('logout') }}"
                class="logout-btn">
-
                 Logout
-
             </a>
 
         </div>
@@ -133,108 +129,142 @@
 
     <main class="content">
 
-        <!-- Topbar -->
+        <!-- ================= TOPBAR ================= -->
 
-<div class="topbar mb-4">
+        <div class="topbar mb-4">
 
-    <!-- Left -->
-    <div class="topbar-left">
-        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Toggle navigation menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </div>
+            <!-- Left -->
 
-    <!-- Center -->
-    <div class="topbar-center">
+            <div class="topbar-left">
 
-        <h4 class="mb-0">
-            {% block page_title %}
-            Learning Dashboard
-            {% endblock %}
-        </h4>
+                <button class="hamburger-btn"
+                        id="hamburgerBtn"
+                        aria-label="Toggle navigation">
 
-        <small class="text-secondary">
-            {% block page_subtitle %}
-            Track progress and improve performance
-            {% endblock %}
-        </small>
+                    <span></span>
+                    <span></span>
+                    <span></span>
 
-    </div>
+                </button>
 
-    <!-- Right -->
-    <div class="topbar-right">
-        {% if session.username %}
-        <div class="user-info">
-            Welcome,
-            <strong>{{ session.username }}</strong>
+            </div>
+
+            <!-- Center -->
+
+            <div class="topbar-center">
+
+                <h4 class="mb-0">
+
+                    {% block page_title %}
+                    Learning Dashboard
+                    {% endblock %}
+
+                </h4>
+
+                <small class="text-secondary">
+
+                    {% block page_subtitle %}
+                    Track progress and improve performance
+                    {% endblock %}
+
+                </small>
+
+            </div>
+
+            <!-- Right -->
+
+            <div class="topbar-right">
+
+                {% if session.username %}
+
+                <div class="user-info">
+
+                    Welcome,
+                    <strong>{{ session.username }}</strong>
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
         </div>
-        {% endif %}
-    </div>
+
+        <!-- ================= PAGE CONTENT ================= -->
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
 
 </div>
 
-<!-- ================= HAMBURGER & SIDEBAR TOGGLE ================= -->
-<script>
-// Mobile Hamburger Menu
-const hamburgerBtn = document.getElementById('hamburgerBtn');
-const sidebar = document.getElementById('sidebar');
-const sidebarOverlay = document.getElementById('sidebarOverlay');
-const menuLinks = document.querySelectorAll('.menu a');
+<!-- ================= SIDEBAR SCRIPT ================= -->
 
-if (hamburgerBtn) {
-    // Toggle sidebar on hamburger click
-    hamburgerBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        sidebar.classList.toggle('show');
-        sidebarOverlay.classList.toggle('show');
-        hamburgerBtn.classList.toggle('active');
-        document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : 'auto';
+<script>
+
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("sidebarOverlay");
+
+if(hamburgerBtn){
+
+    hamburgerBtn.addEventListener("click", function(){
+
+        sidebar.classList.toggle("show");
+        overlay.classList.toggle("show");
+        hamburgerBtn.classList.toggle("active");
+
+        document.body.style.overflow =
+            sidebar.classList.contains("show") ? "hidden" : "auto";
+
     });
 
-    // Close sidebar when clicking overlay
-    if (sidebarOverlay) {
-        sidebarOverlay.addEventListener('click', () => {
-            sidebar.classList.remove('show');
-            sidebarOverlay.classList.remove('show');
-            hamburgerBtn.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        });
+}
+
+if(overlay){
+
+    overlay.addEventListener("click", function(){
+
+        sidebar.classList.remove("show");
+        overlay.classList.remove("show");
+        hamburgerBtn.classList.remove("active");
+        document.body.style.overflow="auto";
+
+    });
+
+}
+
+document.querySelectorAll(".menu a").forEach(link=>{
+
+    link.addEventListener("click",function(){
+
+        if(window.innerWidth<=768){
+
+            sidebar.classList.remove("show");
+            overlay.classList.remove("show");
+            hamburgerBtn.classList.remove("active");
+            document.body.style.overflow="auto";
+
+        }
+
+    });
+
+});
+
+window.addEventListener("resize",function(){
+
+    if(window.innerWidth>768){
+
+        sidebar.classList.remove("show");
+        overlay.classList.remove("show");
+        hamburgerBtn.classList.remove("active");
+        document.body.style.overflow="auto";
+
     }
 
-    // Close sidebar on Escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && sidebar.classList.contains('show')) {
-            sidebar.classList.remove('show');
-            sidebarOverlay.classList.remove('show');
-            hamburgerBtn.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-    });
+});
 
-    // Close sidebar when clicking menu links (mobile only)
-    menuLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.remove('show');
-                sidebarOverlay.classList.remove('show');
-                hamburgerBtn.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-        });
-    });
-
-    // Close sidebar on window resize (when moving from mobile to desktop)
-    window.addEventListener('resize', () => {
-        if (window.innerWidth > 768) {
-            sidebar.classList.remove('show');
-            sidebarOverlay.classList.remove('show');
-            hamburgerBtn.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-    });
-}
 </script>
 
 <!-- ================= DARK MODE ================= -->
@@ -244,29 +274,29 @@ if (hamburgerBtn) {
 const toggleBtn = document.getElementById("themeToggle");
 const body = document.body;
 
-// Load saved theme
+if(localStorage.getItem("theme")==="dark"){
 
-if(localStorage.getItem("theme") === "dark")
-{
     body.classList.add("dark");
-    toggleBtn.innerHTML = "Light Mode";
+    toggleBtn.innerHTML="Light Mode";
+
 }
 
-// Toggle Theme
-
-toggleBtn.addEventListener("click", () => {
+toggleBtn.addEventListener("click",()=>{
 
     body.classList.toggle("dark");
 
-    if(body.classList.contains("dark"))
-    {
+    if(body.classList.contains("dark")){
+
         localStorage.setItem("theme","dark");
-        toggleBtn.innerHTML = "Light Mode";
+        toggleBtn.innerHTML="Light Mode";
+
     }
-    else
-    {
+
+    else{
+
         localStorage.setItem("theme","light");
-        toggleBtn.innerHTML = "Dark Mode";
+        toggleBtn.innerHTML="Dark Mode";
+
     }
 
 });
