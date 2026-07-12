@@ -38,9 +38,12 @@ body{
     border-right:1px solid #e2e8f0;
     display:flex;
     flex-direction:column;
-    justify-content:space-between;
     padding:28px 22px;
     transition:0.3s;
+    height:100vh;
+    position:sticky;
+    top:0;
+    overflow-y:auto;
 }
 
 /* ---------- LOGO ---------- */
@@ -2023,10 +2026,18 @@ body:not(.dark) .topbar{
         z-index:9998;
         border-right:1px solid #e2e8f0;
         border-bottom:none;
-        overflow-y:auto;
-        overflow-x:hidden;
+        display:flex;
+        flex-direction:column;
+        overflow:hidden;
         transition:.35s ease;
         box-shadow:2px 0 10px rgba(0,0,0,.1);
+    }
+
+    .sidebar > div:first-of-type {
+        flex:1;
+        overflow-y:auto;
+        overflow-x:hidden;
+        min-height:0;
     }
 
     .sidebar.show{

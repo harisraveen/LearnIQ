@@ -103,6 +103,11 @@
                     Viva Assessment
                 </a>
 
+                <a href="{{ url_for('profile') }}"
+                   class="{% if request.endpoint=='profile' %}active{% endif %}">
+                    Profile
+                </a>
+
             </nav>
 
         </div>

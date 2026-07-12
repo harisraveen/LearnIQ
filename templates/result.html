@@ -7,205 +7,168 @@ Assessment Result
 {% block content %}
 
 <!-- RESULT HEADER -->
-
 <div class="result-hero mb-5">
-
-<div class="text-center">
-
-    <span class="hero-tag">
-        Assessment Completed
-    </span>
-
-    <h1 class="result-score mt-3">
-        {{ percentage }}%
-    </h1>
-
-    <h3 class="mt-3">
-        {{ achievement }}
-    </h3>
-
-    <p class="dashboard-subtitle mt-3">
-        Review your assessment performance and personalized learning recommendations.
-    </p>
-
-</div>
-
+    <div class="text-center">
+        <span class="hero-tag">
+            Assessment Completed
+        </span>
+        <h1 class="result-score mt-3" style="font-size: 54px; font-weight: 800; color: #0f172a;">
+            {{ percentage }}%
+        </h1>
+        <h3 class="mt-3" style="font-weight: 700;">
+            {{ achievement }}
+        </h3>
+        <p class="dashboard-subtitle mt-3">
+            Review your performance metrics, study roadmap, and correct solutions below.
+        </p>
+    </div>
 </div>
 
 <!-- PERFORMANCE METRICS -->
-
 <div class="row g-4 mb-4">
-
-<div class="col-md-3">
-
-    <div class="metric-card text-center">
-
-        <small class="text-secondary">
-            Correct Answers
-        </small>
-
-        <h2>
-            {{ score }}
-        </h2>
-
+    <div class="col-md-3">
+        <div class="analytics-card text-center h-100">
+            <small class="text-secondary d-block mb-2">Accuracy</small>
+            <h2 class="text-primary">{{ percentage }}%</h2>
+        </div>
     </div>
 
-</div>
-
-<div class="col-md-3">
-
-    <div class="metric-card text-center">
-
-        <small class="text-secondary">
-            Incorrect Answers
-        </small>
-
-        <h2>
-            {{ wrong }}
-        </h2>
-
+    <div class="col-md-3">
+        <div class="analytics-card text-center h-100">
+            <small class="text-secondary d-block mb-2">Correct Answers</small>
+            <h2 class="text-success">{{ score }}</h2>
+        </div>
     </div>
 
-</div>
-
-<div class="col-md-3">
-
-    <div class="metric-card text-center">
-
-        <small class="text-secondary">
-            XP Earned
-        </small>
-
-        <h2>
-            {{ xp }}
-        </h2>
-
+    <div class="col-md-3">
+        <div class="analytics-card text-center h-100">
+            <small class="text-secondary d-block mb-2">Incorrect Answers</small>
+            <h2 class="text-danger">{{ wrong }}</h2>
+        </div>
     </div>
 
-</div>
-
-<div class="col-md-3">
-
-    <div class="metric-card text-center">
-
-        <small class="text-secondary">
-            Current Level
-        </small>
-
-        <h2>
-            {{ level }}
-        </h2>
-
+    <div class="col-md-3">
+        <div class="analytics-card text-center h-100">
+            <small class="text-secondary d-block mb-2">XP Earned</small>
+            <h2 class="text-warning">{{ xp }}</h2>
+        </div>
     </div>
-
 </div>
 
-</div>
-
-<!-- PERFORMANCE BAR -->
-
+<!-- PERFORMANCE PROGRESS BAR -->
 <div class="card-custom mb-4">
-
-<h4 class="mb-3">
-    Overall Performance
-</h4>
-
-<div class="progress">
-
-    <div
-        class="progress-bar"
-        role="progressbar"
-        style="width: {{ percentage }}%;">
-
+    <h4 class="mb-3">Overall Performance Progress</h4>
+    <div class="progress" style="height: 10px;">
+        <div
+            class="progress-bar"
+            role="progressbar"
+            style="width: {{ percentage }}%;">
+        </div>
     </div>
-
+    <p class="mt-3 mb-0 text-secondary" style="font-weight: 500;">
+        Coach Notes: {{ message }}
+    </p>
 </div>
 
-<p class="mt-3 mb-0 text-secondary">
-    {{ message }}
-</p>
-
-</div>
-
-<!-- AI FEEDBACK -->
-
+<!-- AI FEEDBACK CARD -->
 <div class="card-custom mb-4">
-
-<h3 class="mb-4">
-    Learning Insights
-</h3>
-
-<div style="white-space: pre-line;">
-
-    {{ feedback }}
-
-</div>
-
+    <h3 class="mb-4">🤖 AI Learning Coach Insights</h3>
+    
+    {% if feedback is mapping %}
+    <div class="row g-4">
+        <!-- Strengths -->
+        <div class="col-md-6">
+            <div class="p-3 border rounded-4 bg-light-subtle h-100">
+                <h5 class="text-success mb-2">💪 Strengths</h5>
+                <p class="text-secondary mb-0" style="font-size: 14px; line-height: 1.6;">{{ feedback.strengths }}</p>
+            </div>
+        </div>
+        
+        <!-- Weaknesses -->
+        <div class="col-md-6">
+            <div class="p-3 border rounded-4 bg-light-subtle h-100">
+                <h5 class="text-danger mb-2">⚠️ Weaknesses</h5>
+                <p class="text-secondary mb-0" style="font-size: 14px; line-height: 1.6;">{{ feedback.weaknesses }}</p>
+            </div>
+        </div>
+        
+        <!-- Recommended Topics -->
+        <div class="col-md-12">
+            <div class="p-3 border rounded-4 bg-light-subtle">
+                <h5 class="mb-3">📚 Recommended Topics</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    {% for topic in feedback.recommended_topics %}
+                    <span class="badge bg-primary px-3 py-2" style="font-size: 13px;">{{ topic }}</span>
+                    {% else %}
+                    <span class="text-secondary">No recommendations needed. Keep exploring new subjects!</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Learning Roadmap -->
+        <div class="col-md-12">
+            <div class="p-3 border rounded-4 bg-light-subtle">
+                <h5 class="mb-2">🗺️ Master Roadmap</h5>
+                <p class="text-secondary mb-0" style="font-size: 14px; line-height: 1.6; white-space: pre-line;">{{ feedback.roadmap }}</p>
+            </div>
+        </div>
+        
+        <!-- Study Suggestions -->
+        <div class="col-md-12">
+            <div class="p-3 border rounded-4 bg-light-subtle">
+                <h5 class="mb-2">💡 Study Suggestions</h5>
+                <p class="text-secondary mb-0" style="font-size: 14px; line-height: 1.6; white-space: pre-line;">{{ feedback.study_suggestions }}</p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Fallback if feedback is raw text -->
+    <div class="text-secondary" style="white-space: pre-line; line-height: 1.7; font-size: 14px;">
+        {{ feedback }}
+    </div>
+    {% endif %}
 </div>
 
 <!-- ANSWER REVIEW -->
-
 <div class="card-custom">
+    <h3 class="mb-4">📝 Answer Review</h3>
 
-<h3 class="mb-4">
-    Answer Review
-</h3>
+    {% for item in results %}
+    <div class="answer-card mb-3 {% if item.is_correct %}correct-answer{% else %}wrong-answer{% endif %}">
+        <h5 class="mb-3">
+            {{ item.question }}
+        </h5>
+        
+        <p class="mb-2">
+            <strong>Your Answer:</strong> 
+            <span class="{% if item.is_correct %}text-success fw-semibold{% else %}text-danger fw-semibold{% endif %}">
+                {{ item.user_answer if item.user_answer else 'Skipped' }}
+            </span>
+        </p>
+        
+        <p class="mb-3">
+            <strong>Correct Answer:</strong> 
+            <span class="text-success fw-semibold">{{ item.correct_answer }}</span>
+        </p>
 
-{% for item in results %}
+        {% if item.is_correct %}
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1">
+                Correct
+            </span>
+        {% else %}
+            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-1">
+                Incorrect
+            </span>
+        {% endif %}
+    </div>
+    {% endfor %}
 
-<div class="review-card mb-3">
-
-    <h5 class="mb-3">
-
-        {{ item.question }}
-
-    </h5>
-
-    <p>
-
-        <strong>
-            Your Answer:
-        </strong>
-
-        {{ item.user_answer }}
-
-    </p>
-
-    <p>
-
-        <strong>
-            Correct Answer:
-        </strong>
-
-        {{ item.correct_answer }}
-
-    </p>
-
-    {% if item.is_correct %}
-
-        <span class="status-badge excellent">
-            Correct
-        </span>
-
-    {% else %}
-
-        <span class="status-badge improve">
-            Incorrect
-        </span>
-
-    {% endif %}
-
-</div>
-
-{% endfor %}
-
-<a href="/"
-   class="btn btn-primary mt-4">
-
-    Return to Dashboard
-
-</a>
-
+    <div class="text-center mt-4">
+        <a href="/" class="btn btn-primary px-5 py-3">
+            Return to Dashboard
+        </a>
+    </div>
 </div>
 
 {% endblock %}

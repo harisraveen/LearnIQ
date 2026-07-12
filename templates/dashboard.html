@@ -7,283 +7,287 @@ Dashboard
 {% block content %}
 
 <div class="analytics-header mb-5">
-
     <div>
-
-        <span class="section-tag">
+        <span class="hero-tag">
             Learning Analytics
         </span>
-
-        <h1 class="analytics-title">
+        <h1 class="dashboard-title">
             Performance Dashboard
         </h1>
-
-        <p class="analytics-subtitle">
-            Monitor assessment performance, learning progress and AI-generated insights.
+        <p class="dashboard-subtitle">
+            Monitor assessment performance, learning streaks, activity feeds, and AI-generated insights.
         </p>
-
     </div>
-
 </div>
 
 <!-- KPI CARDS -->
-
 <div class="row g-4 mb-4">
-
-    <div class="col-md-3">
-        <div class="metric-card">
-            <span>Total Assessments</span>
+    <div class="col-md-3 col-sm-6">
+        <div class="analytics-card h-100 text-center">
+            <span class="text-secondary d-block mb-2">Total Assessments</span>
             <h2>{{ stats.total_quizzes }}</h2>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="metric-card">
-            <span>Average Score</span>
-            <h2>{{ stats.average_score }}%</h2>
+    <div class="col-md-3 col-sm-6">
+        <div class="analytics-card h-100 text-center">
+            <span class="text-secondary d-block mb-2">Average Score</span>
+            <h2 class="text-primary">{{ stats.average_score }}%</h2>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="metric-card">
-            <span>Highest Score</span>
-            <h2>{{ stats.highest_score }}%</h2>
+    <div class="col-md-3 col-sm-6">
+        <div class="analytics-card h-100 text-center">
+            <span class="text-secondary d-block mb-2">Highest Score</span>
+            <h2 class="text-success">{{ stats.highest_score }}%</h2>
         </div>
     </div>
 
-    <div class="col-md-3">
-        <div class="metric-card">
-            <span>Lowest Score</span>
-            <h2>{{ stats.lowest_score }}%</h2>
+    <div class="col-md-3 col-sm-6">
+        <div class="analytics-card h-100 text-center">
+            <span class="text-secondary d-block mb-2">Learning Streak</span>
+            <h2 class="text-danger">{{ streak }} Days 🔥</h2>
         </div>
     </div>
-
 </div>
 
 <!-- MAIN GRID -->
-
-<div class="row g-4 mb-4">
-
+<div class="row g-4">
+    
+    <!-- LEFT COLUMN: CHARTS & ACTIVITY -->
     <div class="col-lg-8">
-
-        <div class="analytics-card">
-
-            <h4>
-                Learning Progress
-            </h4>
-
-            <p class="text-secondary">
-                Based on average assessment performance.
-            </p>
-
-            <div class="progress modern-progress mt-4">
-
-                <div class="progress-bar"
-                     style="width:{{ stats.average_score }}%">
-
+        <div class="d-flex flex-column gap-4">
+            
+            <!-- WEEKLY PERFORMANCE CHART -->
+            <div class="analytics-card">
+                <h4 class="mb-2">Weekly Performance</h4>
+                <p class="text-secondary">Quiz score progress over your last 7 assessments.</p>
+                <div class="chart-container" style="position: relative; height: 280px; width: 100%;">
+                    <canvas id="weeklyChart"></canvas>
                 </div>
-
             </div>
 
-            <h3 class="mt-3">
-                {{ stats.average_score }}%
-            </h3>
+            <!-- TOPIC-WISE PERFORMANCE CHART -->
+            <div class="analytics-card">
+                <h4 class="mb-2">Topic-wise Performance</h4>
+                <p class="text-secondary">Average scores achieved in each study subject.</p>
+                <div class="chart-container" style="position: relative; height: 280px; width: 100%;">
+                    <canvas id="topicChart"></canvas>
+                </div>
+            </div>
+
+            <!-- RECENT ACTIVITY -->
+            <div class="card-custom">
+                <h3 class="mb-4">📋 Recent Activity Feed</h3>
+                {% if recent_activity %}
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Activity</th>
+                                <th>Topic</th>
+                                <th>Score / Accuracy</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for act in recent_activity %}
+                            <tr>
+                                <td>
+                                    {% if act[0] == 'Quiz' %}
+                                    <span class="badge bg-primary">Quiz Attempt</span>
+                                    {% else %}
+                                    <span class="badge bg-info text-dark">Viva Session</span>
+                                    {% endif %}
+                                </td>
+                                <td><strong>{{ act[1] }}</strong></td>
+                                <td>
+                                    {% if act[2] >= 80 %}
+                                    <span class="badge bg-success">{{ act[2] }}%</span>
+                                    {% elif act[2] >= 50 %}
+                                    <span class="badge bg-warning text-dark">{{ act[2] }}%</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">{{ act[2] }}%</span>
+                                    {% endif %}
+                                </td>
+                                <td><small class="text-secondary">{{ act[3][:10] }}</small></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-secondary">No quizzes or viva sessions recorded yet.</p>
+                {% endif %}
+            </div>
 
         </div>
-
     </div>
 
+    <!-- RIGHT COLUMN: CONTINUE LEARNING, LATEST QUIZ, AI INSIGHTS -->
     <div class="col-lg-4">
+        <div class="d-flex flex-column gap-4">
+            
+            <!-- CONTINUE LEARNING -->
+            <div class="analytics-card">
+                <h4>🎯 Continue Learning</h4>
+                <hr>
+                {% if stats.latest_topic != "None" %}
+                <p class="text-secondary mb-3">Resume your progress in <strong>{{ stats.latest_topic }}</strong>.</p>
+                <div class="d-flex gap-2">
+                    <form action="/quiz" method="POST" class="flex-grow-1">
+                        <input type="hidden" name="topic" value="{{ stats.latest_topic }}">
+                        <input type="hidden" name="difficulty" value="Medium">
+                        <input type="hidden" name="count" value="5">
+                        <button type="submit" class="btn btn-primary btn-sm w-100">Take Quiz</button>
+                    </form>
+                </div>
+                {% else %}
+                <p class="text-secondary mb-3">Begin by starting your first AI assessment.</p>
+                <a href="/#quiz-section" class="btn btn-primary btn-sm w-100">Start quiz</a>
+                {% endif %}
+            </div>
 
-        <div class="analytics-card">
+            <!-- LATEST QUIZ SUMMARY -->
+            <div class="analytics-card">
+                <h4>📊 Latest Quiz Summary</h4>
+                <hr>
+                {% if latest_quiz %}
+                <div>
+                    <span class="badge bg-primary mb-2">{{ latest_quiz.topic }}</span>
+                    <h2>{{ latest_quiz.percentage }}%</h2>
+                    <p class="text-secondary mt-2 mb-0" style="font-size: 13px;">
+                        Correct Answers: <strong>{{ latest_quiz.score }} / {{ latest_quiz.total }}</strong><br>
+                        Attempted Date: {{ latest_quiz.date[:10] }}
+                    </p>
+                </div>
+                {% else %}
+                <p class="text-secondary">No assessment history available yet.</p>
+                {% endif %}
+            </div>
 
-            <h4>
-                Latest Topic
-            </h4>
+            <!-- AI LEARNING INSIGHTS -->
+            <div class="analytics-card">
+                <h4>💡 AI Learning Insights</h4>
+                <hr>
+                <div class="text-secondary" style="white-space: pre-line; font-size: 13px; line-height: 1.6;">
+                    {{ insights }}
+                </div>
+            </div>
 
-            <h2 class="mt-4">
-                {{ stats.latest_topic }}
-            </h2>
-
-        </div>
-
-    </div>
-
-</div>
-
-<div class="analytics-card mb-4">
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-
-        <div>
-
-            <h4>
-                Performance Trend
-            </h4>
-
-            <p class="text-secondary mb-0">
-                Assessment performance over time
-            </p>
-
-        </div>
-
-    </div>
-
-    <div class="chart-wrapper">
-
-        <canvas id="performanceChart"></canvas>
-
-    </div>
-
-</div>
-
-<!-- INSIGHTS -->
-
-<div class="row g-4">
-
-    <div class="col-lg-6">
-
-        <div class="analytics-card">
-
-            <h4>
-                Strong Topics
-            </h4>
-
-            <hr>
-
-            {% if strong_topics %}
-
-                <ul>
-
-                    {% for topic in strong_topics %}
-                    <li>{{ topic }}</li>
-                    {% endfor %}
-
-                </ul>
-
-            {% else %}
-
-                <p class="text-secondary">
-                    No strong topics identified.
-                </p>
-
-            {% endif %}
-
-        </div>
-
-    </div>
-
-    <div class="col-lg-6">
-
-        <div class="analytics-card">
-
-            <h4>
-                Improvement Areas
-            </h4>
-
-            <hr>
-
-            {% if weak_topics %}
-
-                <ul>
-
-                    {% for topic in weak_topics %}
-                    <li>{{ topic }}</li>
-                    {% endfor %}
-
-                </ul>
-
-            {% else %}
-
-                <p class="text-secondary">
-                    No improvement areas detected.
-                </p>
-
-            {% endif %}
+            <!-- TOPIC BARS -->
+            <div class="analytics-card">
+                <h4>🎯 Topic Mastery</h4>
+                <hr>
+                {% if strong_topics or weak_topics %}
+                    {% if strong_topics %}
+                    <h6 class="text-success mt-2">Strong areas:</h6>
+                    <div class="d-flex flex-wrap gap-1 mb-3">
+                        {% for t in strong_topics %}
+                        <span class="badge bg-success-subtle text-success border border-success-subtle">{{ t }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% if weak_topics %}
+                    <h6 class="text-danger">Improvement areas:</h6>
+                    <div class="d-flex flex-wrap gap-1">
+                        {% for t in weak_topics %}
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle">{{ t }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                {% else %}
+                <p class="text-secondary">Take some quizzes to identify masteries.</p>
+                {% endif %}
+            </div>
 
         </div>
-
     </div>
-
 </div>
 
 <!-- ROADMAP -->
-
 <div class="analytics-card mt-4">
-
-    <h4>
-        Personalized Learning Roadmap
-    </h4>
-
+    <h4>🗺️ Personalized Study Roadmap</h4>
     <hr>
-
-    <div style="white-space: pre-line;">
+    <div class="text-secondary" style="white-space: pre-line; line-height: 1.7; font-size: 14px;">
         {{ roadmap }}
     </div>
-
 </div>
 
+<!-- ChartJS library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-
-const chartCtx =
-document.getElementById('performanceChart');
-
-new Chart(chartCtx,{
-
-    type:'line',
-
-    data:{
-
-        labels:[
-            'Quiz 1',
-            'Quiz 2',
-            'Quiz 3',
-            'Quiz 4',
-            'Quiz 5'
-        ],
-
-        datasets:[{
-
-            data:[
-                45,
-                60,
-                70,
-                82,
-                {{ stats.average_score }}
-            ],
-
-            borderColor:'#2563eb',
-
-            backgroundColor:'rgba(37,99,235,0.08)',
-
-            fill:true,
-
-            tension:.4,
-
-            borderWidth:3
-
-        }]
-
-    },
-
-    options:{
-
-        plugins:{
-            legend:{
-                display:false
-            }
+    // Weekly performance line chart
+    const weeklyCtx = document.getElementById('weeklyChart').getContext('2d');
+    const weeklyChart = new Chart(weeklyCtx, {
+        type: 'line',
+        data: {
+            labels: {{ weekly_labels | tojson }},
+            datasets: [{
+                label: 'Score (%)',
+                data: {{ weekly_scores | tojson }},
+                borderColor: '#2563eb',
+                backgroundColor: 'rgba(37,99,235,0.06)',
+                fill: true,
+                tension: 0.35,
+                borderWidth: 3,
+                pointRadius: 4,
+                pointBackgroundColor: '#2563eb'
+            }]
         },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100,
+                    grid: { color: 'rgba(226, 232, 240, 0.5)' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
 
-        responsive:true,
-
-        maintainAspectRatio:false
-
-    }
-
-});
-
+    // Topic performance bar chart
+    const topicCtx = document.getElementById('topicChart').getContext('2d');
+    const topicChart = new Chart(topicCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ topic_labels | tojson }},
+            datasets: [{
+                label: 'Average Score (%)',
+                data: {{ topic_scores | tojson }},
+                backgroundColor: 'rgba(59, 130, 246, 0.75)',
+                hoverBackgroundColor: 'rgba(37, 99, 235, 0.95)',
+                borderRadius: 8,
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    min: 0,
+                    max: 100,
+                    grid: { color: 'rgba(226, 232, 240, 0.5)' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
 </script>
 
 {% endblock %}

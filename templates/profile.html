@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block content %}
+
+<!-- HEADER -->
+<div class="analytics-header mb-5">
+    <span class="hero-tag">
+        User Profile
+    </span>
+    <h1 class="dashboard-title">
+        Your Profile
+    </h1>
+    <p class="dashboard-subtitle">
+        Manage your account information, security settings, and view overall learning statistics.
+    </p>
+</div>
+
+<!-- NOTIFICATIONS -->
+{% if error %}
+<div class="alert alert-danger alert-dismissible fade show mb-4" role="alert" style="border-radius: 14px; font-size: 14px;">
+    {{ error }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
+{% if success %}
+<div class="alert alert-success alert-dismissible fade show mb-4" role="alert" style="border-radius: 14px; font-size: 14px;">
+    {{ success }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+
+<div class="row g-4">
+    <!-- STATS COLUMN -->
+    <div class="col-lg-4">
+        <div class="card-custom h-100">
+            <h3 class="mb-4">📊 Learning Stats</h3>
+            
+            <div class="mb-4 text-center">
+                <div class="d-inline-block bg-primary text-white rounded-circle p-3 mb-3" style="width: 70px; height: 70px; font-size: 28px; line-height: 38px; font-weight: 700;">
+                    {{ stats.username[0]|upper if stats.username else 'U' }}
+                </div>
+                <h4>{{ stats.username }}</h4>
+                <p class="text-secondary" style="font-size: 13px;">Member since: {{ stats.joined_date[:10] if stats.joined_date else 'N/A' }}</p>
+            </div>
+
+            <hr>
+
+            <div class="d-flex justify-content-between py-2 border-bottom">
+                <span class="text-secondary">Email</span>
+                <strong>{{ stats.email if stats.email else 'Not Provided' }}</strong>
+            </div>
+
+            <div class="d-flex justify-content-between py-2 border-bottom">
+                <span class="text-secondary">Total Quizzes</span>
+                <strong>{{ stats.total_quizzes }}</strong>
+            </div>
+
+            <div class="d-flex justify-content-between py-2 border-bottom">
+                <span class="text-secondary">Viva Sessions</span>
+                <strong>{{ stats.total_vivas }}</strong>
+            </div>
+
+            <div class="d-flex justify-content-between py-2 border-bottom">
+                <span class="text-secondary">Highest Quiz Score</span>
+                <strong class="text-success">{{ stats.highest_score }}%</strong>
+            </div>
+
+            <div class="d-flex justify-content-between py-2">
+                <span class="text-secondary">Average Quiz Score</span>
+                <strong class="text-primary">{{ stats.average_score }}%</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- SETTINGS COLUMN -->
+    <div class="col-lg-8">
+        <div class="d-flex flex-column gap-4">
+            
+            <!-- EDIT PROFILE -->
+            <div class="card-custom">
+                <h3 class="mb-4">✏️ Edit Profile</h3>
+                
+                <form action="/profile" method="POST" id="profileForm" novalidate>
+                    <input type="hidden" name="action" value="update_profile">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="form-control"
+                            value="{{ stats.username }}"
+                            required>
+                        <div class="invalid-feedback" id="usernameFeedback">
+                            Username must be 3-20 characters and contain only letters, numbers, or underscores.
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Email Address</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-control"
+                            value="{{ stats.email }}"
+                            required>
+                        <div class="invalid-feedback" id="emailFeedback">
+                            Please enter a valid email address.
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="updateProfileBtn">
+                        Save Changes
+                    </button>
+                </form>
+            </div>
+
+            <!-- CHANGE PASSWORD -->
+            <div class="card-custom">
+                <h3 class="mb-4">🔒 Change Password</h3>
+                
+                <form action="/profile" method="POST" id="passwordForm" novalidate>
+                    <input type="hidden" name="action" value="change_password">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Current Password</label>
+                        <input
+                            type="password"
+                            id="current_password"
+                            name="current_password"
+                            class="form-control"
+                            required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">New Password</label>
+                        <div class="input-group">
+                            <input
+                                type="password"
+                                id="new_password"
+                                name="new_password"
+                                class="form-control"
+                                required>
+                            <button class="btn btn-outline-secondary" type="button" id="toggleNewPassword" style="border-top-right-radius: 14px; border-bottom-right-radius: 14px; border-color: #dbe2ea; border-left: none;">Show</button>
+                        </div>
+                        
+                        <!-- Strength indicator -->
+                        <div class="mt-2">
+                            <small class="text-secondary" style="font-size: 12px;">Password Strength: <strong id="strengthLabel">None</strong></small>
+                            <div class="progress mt-1" style="height: 6px; background-color: #e2e8f0; border-radius: 999px;">
+                                <div id="strengthBar" class="progress-bar" role="progressbar" style="width: 0%; border-radius: 999px; transition: width 0.3s ease;"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Feedback info -->
+                        <div class="mt-2" style="font-size: 11px; color: #64748b;" id="passwordRequirements">
+                            Must contain at least 8 characters, an uppercase, a lowercase, a number, and a special character.
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Confirm New Password</label>
+                        <div class="input-group">
+                            <input
+                                type="password"
+                                id="confirm_new_password"
+                                name="confirm_new_password"
+                                class="form-control"
+                                required>
+                            <button class="btn btn-outline-secondary" type="button" id="toggleConfirmNewPassword" style="border-top-right-radius: 14px; border-bottom-right-radius: 14px; border-color: #dbe2ea; border-left: none;">Show</button>
+                        </div>
+                        <div class="invalid-feedback" id="confirmFeedback">
+                            Passwords do not match.
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="changePasswordBtn">
+                        Change Password
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // PROFILE FORM VALIDATION
+    const profileForm = document.getElementById('profileForm');
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const updateProfileBtn = document.getElementById('updateProfileBtn');
+
+    function validateUsername() {
+        const val = usernameInput.value.trim();
+        const regex = /^[a-zA-Z0-9_]{3,20}$/;
+        if (!regex.test(val)) {
+            usernameInput.classList.add('is-invalid');
+            usernameInput.classList.remove('is-valid');
+            return false;
+        } else {
+            usernameInput.classList.remove('is-invalid');
+            usernameInput.classList.add('is-valid');
+            return true;
+        }
+    }
+
+    function validateEmail() {
+        const val = emailInput.value.trim();
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!regex.test(val)) {
+            emailInput.classList.add('is-invalid');
+            emailInput.classList.remove('is-valid');
+            return false;
+        } else {
+            emailInput.classList.remove('is-invalid');
+            emailInput.classList.add('is-valid');
+            return true;
+        }
+    }
+
+    usernameInput.addEventListener('input', validateUsername);
+    emailInput.addEventListener('input', validateEmail);
+
+    profileForm.addEventListener('submit', function(e) {
+        const isUserValid = validateUsername();
+        const isEmailValid = validateEmail();
+
+        if (!isUserValid || !isEmailValid) {
+            e.preventDefault();
+            e.stopPropagation();
+        } else {
+            updateProfileBtn.disabled = true;
+            updateProfileBtn.innerText = 'Saving...';
+        }
+    });
+
+    // PASSWORD FORM VALIDATION
+    const passwordForm = document.getElementById('passwordForm');
+    const newPassword = document.getElementById('new_password');
+    const confirmNewPassword = document.getElementById('confirm_new_password');
+    const strengthLabel = document.getElementById('strengthLabel');
+    const strengthBar = document.getElementById('strengthBar');
+    const changePasswordBtn = document.getElementById('changePasswordBtn');
+
+    // Toggle password visibility
+    document.getElementById('toggleNewPassword').addEventListener('click', function() {
+        const type = newPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        newPassword.setAttribute('type', type);
+        this.innerText = type === 'password' ? 'Show' : 'Hide';
+    });
+
+    document.getElementById('toggleConfirmNewPassword').addEventListener('click', function() {
+        const type = confirmNewPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmNewPassword.setAttribute('type', type);
+        this.innerText = type === 'password' ? 'Show' : 'Hide';
+    });
+
+    // Strength checker
+    newPassword.addEventListener('input', function() {
+        const val = newPassword.value;
+        let score = 0;
+
+        if (val.length >= 8) score++;
+        if (/[A-Z]/.test(val)) score++;
+        if (/[a-z]/.test(val)) score++;
+        if (/[0-9]/.test(val)) score++;
+        if (/[@$!%*?&]/.test(val)) score++;
+
+        let pct = (score / 5) * 100;
+        let text = 'None';
+        let bgClass = 'bg-secondary';
+
+        if (val.length > 0) {
+            if (score <= 2) {
+                text = 'Weak';
+                bgClass = 'bg-danger';
+            } else if (score <= 4) {
+                text = 'Medium';
+                bgClass = 'bg-warning';
+            } else if (score === 5) {
+                text = 'Strong';
+                bgClass = 'bg-success';
+            }
+        }
+
+        strengthLabel.innerText = text;
+        strengthBar.className = 'progress-bar ' + bgClass;
+        strengthBar.style.width = pct + '%';
+    });
+
+    function validateNewPassword() {
+        const val = newPassword.value;
+        let valid = val.length >= 8 &&
+                    /[A-Z]/.test(val) &&
+                    /[a-z]/.test(val) &&
+                    /[0-9]/.test(val) &&
+                    /[@$!%*?&]/.test(val);
+        if (!valid) {
+            newPassword.classList.add('is-invalid');
+            newPassword.classList.remove('is-valid');
+            return false;
+        } else {
+            newPassword.classList.remove('is-invalid');
+            newPassword.classList.add('is-valid');
+            return true;
+        }
+    }
+
+    function validateConfirmNewPassword() {
+        if (confirmNewPassword.value !== newPassword.value || confirmNewPassword.value === "") {
+            confirmNewPassword.classList.add('is-invalid');
+            confirmNewPassword.classList.remove('is-valid');
+            return false;
+        } else {
+            confirmNewPassword.classList.remove('is-invalid');
+            confirmNewPassword.classList.add('is-valid');
+            return true;
+        }
+    }
+
+    newPassword.addEventListener('input', () => { validateNewPassword(); validateConfirmNewPassword(); });
+    confirmNewPassword.addEventListener('input', validateConfirmNewPassword);
+
+    passwordForm.addEventListener('submit', function(e) {
+        const isPassValid = validateNewPassword();
+        const isConfirmValid = validateConfirmNewPassword();
+
+        if (!isPassValid || !isConfirmValid) {
+            e.preventDefault();
+            e.stopPropagation();
+        } else {
+            changePasswordBtn.disabled = true;
+            changePasswordBtn.innerText = 'Updating Password...';
+        }
+    });
+</script>
+
+{% endblock %}

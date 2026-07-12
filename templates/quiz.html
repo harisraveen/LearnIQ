@@ -6,134 +6,313 @@ Assessment
 
 {% block content %}
 
+<!-- STYLING FOR SELECTION FEEDBACK -->
+<style>
+.option-box.selected {
+    border-color: #2563eb !important;
+    background-color: #eef4ff !important;
+}
+body.dark .option-box.selected {
+    border-color: #3b82f6 !important;
+    background-color: #293548 !important;
+}
+.q-nav-btn {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 12px;
+    transition: 0.25s;
+}
+.q-nav-btn.flagged {
+    background-color: #f59e0b !important;
+    border-color: #f59e0b !important;
+    color: #111827 !important;
+}
+.q-nav-btn.answered {
+    background-color: #16a34a !important;
+    border-color: #16a34a !important;
+    color: #ffffff !important;
+}
+.q-nav-btn.current {
+    border: 3px solid #2563eb !important;
+}
+body.dark .q-nav-btn.current {
+    border: 3px solid #60a5fa !important;
+}
+</style>
+
 <!-- HEADER -->
-
-<div class="d-flex justify-content-between align-items-center mb-5">
-
-<div>
-
-    <span class="hero-tag">
-        Assessment Session
-    </span>
-
-    <h1 class="dashboard-title">
-        {{ topic }}
-    </h1>
-
-    <p class="dashboard-subtitle">
-        Complete all questions before submitting your assessment.
-    </p>
-
-</div>
-
-<div class="timer-card">
-
-    <div class="timer-label">
-        Time Remaining
-    </div>
-
-    <div id="timer" class="timer-value">
-        05:00
-    </div>
-
-</div>
-
-</div>
-
-<form action="/result" method="POST">
-
-{% for q in questions %}
-
-{% set q_index = loop.index0 %}
-
-<div class="question-card mb-4">
-
-<div class="question-number">
-
-    Question {{ loop.index }}
-
-</div>
-
-<h4 class="question-title">
-
-    {{ q.question }}
-
-</h4>
-
-<div class="options-container">
-
-    {% for option in q.options %}
-
-    <label class="option-card">
-
-        <input
-            type="radio"
-            name="q{{ q_index }}"
-            value="{{ option }}"
-            required>
-
-        <span>
-
-            {{ option }}
-
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+        <span class="hero-tag">
+            Assessment Session
         </span>
+        <h1 class="dashboard-title mb-1">
+            {{ topic }}
+        </h1>
+        <p class="dashboard-subtitle mb-0">
+            Complete all questions before submitting your assessment.
+        </p>
+    </div>
 
-    </label>
+    <div class="timer-card">
+        <div class="timer-label me-2">
+            Time Remaining
+        </div>
+        <div id="timer" class="timer-value text-danger fw-bold" style="font-size: 24px;">
+            00:00
+        </div>
+    </div>
+</div>
 
+<!-- QUICK NAVIGATION MAP -->
+<div class="card-custom mb-4">
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+        <span class="text-secondary me-2" style="font-size: 14px; font-weight: 600;">Question Map:</span>
+        {% for q in questions %}
+        <button type="button" class="btn btn-outline-secondary q-nav-btn" id="navBtn_{{ loop.index0 }}" onclick="showQuestion({{ loop.index0 }})">
+            {{ loop.index }}
+        </button>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- PROGRESS BAR & STATS -->
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <span class="text-secondary" style="font-size: 14px; font-weight: 600;">Question <span id="currentQuestionNum">1</span> of {{ questions|length }}</span>
+        <span id="answeredCount" class="badge bg-primary">0 / {{ questions|length }} Answered</span>
+    </div>
+    <div class="progress" style="height: 8px;">
+        <div id="quizProgressBar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+    </div>
+</div>
+
+<!-- FORM -->
+<form action="/result" method="POST" id="quizForm">
+    {% for q in questions %}
+    {% set q_index = loop.index0 %}
+    
+    <div class="question-card mb-4 {% if q_index > 0 %}d-none{% endif %}" id="questionCard_{{ q_index }}">
+        <div class="d-flex align-items-center mb-3">
+            <div class="question-number bg-primary text-white text-center rounded-3 me-3" style="width: 40px; height: 40px; line-height: 40px; font-weight: 700; font-size: 16px;">
+                Q{{ loop.index }}
+            </div>
+            <h4 class="question-text mb-0 flex-grow-1" style="font-size: 18px; font-weight: 700;">
+                {{ q.question }}
+            </h4>
+        </div>
+
+        <div class="options-container">
+            {% for option in q.options %}
+            <div class="option-box p-3 border rounded-3 mb-2 cursor-pointer transition d-flex align-items-center" onclick="selectOption(this, {{ q_index }}, {{ loop.index0 }})">
+                <input
+                    type="radio"
+                    name="q{{ q_index }}"
+                    id="q{{ q_index }}_{{ loop.index0 }}"
+                    value="{{ option }}"
+                    style="margin-right: 12px; transform: scale(1.1);"
+                    onclick="event.stopPropagation();">
+                <label for="q{{ q_index }}_{{ loop.index0 }}" class="mb-0 flex-grow-1 cursor-pointer" onclick="event.stopPropagation();" style="font-size: 15px; color: inherit;">
+                    {{ option }}
+                </label>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
     {% endfor %}
 
-</div>
-
-</div>
-
-{% endfor %}
-
-<button class="btn btn-primary btn-lg w-100">
-
-Submit Assessment
-
-</button>
-
+    <!-- NAVIGATION CONTROLS -->
+    <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap mt-4">
+        <div>
+            <button type="button" class="btn btn-outline-primary" id="prevBtn" onclick="prevQuestion()" disabled>Previous</button>
+            <button type="button" class="btn btn-outline-warning ms-2" id="flagBtn" onclick="toggleFlag()">Flag</button>
+        </div>
+        <div>
+            <button type="button" class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Skip</button>
+            <button type="submit" class="btn btn-success text-white d-none" id="submitBtn">Submit Assessment</button>
+        </div>
+    </div>
 </form>
 
 <script>
-
-let timeLeft = 300;
-
-const timer =
-document.getElementById("timer");
-
-const countdown =
-setInterval(() => {
-
-    let minutes =
-    Math.floor(timeLeft / 60);
-
-    let seconds =
-    timeLeft % 60;
-
-    timer.innerText =
-        String(minutes).padStart(2,'0')
-        + ":" +
-        String(seconds).padStart(2,'0');
-
-    timeLeft--;
-
-    if(timeLeft < 0){
-
-        clearInterval(countdown);
-
-        alert(
-            "Time expired. Assessment submitted."
-        );
-
-        document
-            .querySelector("form")
-            .submit();
+    let currentQuestionIndex = 0;
+    const totalQuestions = {{ questions|length }};
+    const flaggedQuestions = new Array(totalQuestions).fill(false);
+    
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const flagBtn = document.getElementById("flagBtn");
+    const submitBtn = document.getElementById("submitBtn");
+    const progressBar = document.getElementById("quizProgressBar");
+    const currentQuestionNum = document.getElementById("currentQuestionNum");
+    const answeredCount = document.getElementById("answeredCount");
+    
+    // Select Option function
+    function selectOption(box, qIndex, optIndex) {
+        const radio = document.getElementById(`q${qIndex}_${optIndex}`);
+        if (radio) {
+            radio.checked = true;
+            
+            // Toggle active styles in option boxes
+            const siblingBoxes = box.closest('.options-container').querySelectorAll('.option-box');
+            siblingBoxes.forEach(b => b.classList.remove('selected'));
+            box.classList.add('selected');
+            
+            // Trigger change event to update dashboard indicators
+            radio.dispatchEvent(new Event('change'));
+        }
     }
 
-},1000);
+    // Toggle navigation map indicators
+    function showQuestion(index) {
+        // Hide all cards
+        for (let i = 0; i < totalQuestions; i++) {
+            const card = document.getElementById(`questionCard_${i}`);
+            if (i === index) {
+                card.classList.remove('d-none');
+            } else {
+                card.classList.add('d-none');
+            }
+        }
+        
+        currentQuestionIndex = index;
+        currentQuestionNum.innerText = index + 1;
+        
+        // Navigation buttons
+        prevBtn.disabled = index === 0;
+        
+        if (index === totalQuestions - 1) {
+            nextBtn.classList.add('d-none');
+            submitBtn.classList.remove('d-none');
+        } else {
+            nextBtn.classList.remove('d-none');
+            submitBtn.classList.add('d-none');
+        }
+        
+        // Flag text/color
+        if (flaggedQuestions[index]) {
+            flagBtn.innerText = 'Unflag';
+            flagBtn.className = 'btn btn-warning';
+        } else {
+            flagBtn.innerText = 'Flag';
+            flagBtn.className = 'btn btn-outline-warning';
+        }
+        
+        updateControls();
+    }
 
+    function prevQuestion() {
+        if (currentQuestionIndex > 0) {
+            showQuestion(currentQuestionIndex - 1);
+        }
+    }
+
+    function nextQuestion() {
+        if (currentQuestionIndex < totalQuestions - 1) {
+            showQuestion(currentQuestionIndex + 1);
+        }
+    }
+
+    function toggleFlag() {
+        flaggedQuestions[currentQuestionIndex] = !flaggedQuestions[currentQuestionIndex];
+        showQuestion(currentQuestionIndex);
+    }
+
+    function isQuestionAnswered(qIndex) {
+        const radios = document.getElementsByName(`q${qIndex}`);
+        for (let r of radios) {
+            if (r.checked) return true;
+        }
+        return false;
+    }
+
+    function updateControls() {
+        let answersCount = 0;
+        
+        for (let i = 0; i < totalQuestions; i++) {
+            const navBtn = document.getElementById(`navBtn_${i}`);
+            if (navBtn) {
+                navBtn.className = 'btn q-nav-btn';
+                
+                if (i === currentQuestionIndex) {
+                    navBtn.classList.add('current');
+                }
+                
+                if (flaggedQuestions[i]) {
+                    navBtn.classList.add('flagged');
+                } else if (isQuestionAnswered(i)) {
+                    navBtn.classList.add('answered');
+                    answersCount++;
+                } else {
+                    navBtn.classList.add('btn-outline-secondary');
+                }
+            }
+        }
+
+        // Update progress bar
+        const pct = (answersCount / totalQuestions) * 100;
+        progressBar.style.width = pct + '%';
+        answeredCount.innerText = `${answersCount} / ${totalQuestions} Answered`;
+
+        // Update Next/Skip text
+        if (isQuestionAnswered(currentQuestionIndex)) {
+            nextBtn.innerText = 'Next';
+        } else {
+            nextBtn.innerText = 'Skip';
+        }
+    }
+
+    // Set listener on selection change
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Apply selected class to its parent option-box
+            const box = this.closest('.option-box');
+            if (box) {
+                const siblingBoxes = box.closest('.options-container').querySelectorAll('.option-box');
+                siblingBoxes.forEach(b => b.classList.remove('selected'));
+                box.classList.add('selected');
+            }
+            updateControls();
+        });
+    });
+
+    // Initialize map
+    showQuestion(0);
+
+    // ================= TIMER LOGIC =================
+    let timeLeft = totalQuestions * 60; // 60 seconds per question
+    const timerDisplay = document.getElementById("timer");
+    
+    const countdown = setInterval(() => {
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+        
+        timerDisplay.innerText = 
+            String(minutes).padStart(2, '0') + ":" + 
+            String(seconds).padStart(2, '0');
+            
+        if (timeLeft <= 30) {
+            timerDisplay.classList.add("text-danger");
+        }
+        
+        timeLeft--;
+        
+        if (timeLeft < 0) {
+            clearInterval(countdown);
+            alert("Time's up! Submitting your assessment.");
+            document.getElementById("quizForm").submit();
+        }
+    }, 1000);
+
+    // Disable double submissions
+    document.getElementById("quizForm").addEventListener('submit', function() {
+        clearInterval(countdown);
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Submitting...';
+    });
 </script>
 
 {% endblock %}

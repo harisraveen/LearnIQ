@@ -163,43 +163,100 @@
 
             </div>
 
+            {% if error %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 14px; font-size: 14px; margin-bottom: 25px;">
+                {{ error }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+
             <form action="/register"
-                  method="POST">
+                  method="POST"
+                  id="registerForm"
+                  class="needs-validation"
+                  novalidate>
 
+                <!-- Username -->
                 <div class="mb-3">
-
-                    <label class="form-label">
-                        Username
-                    </label>
-
+                    <label class="form-label">Username</label>
                     <input
                         type="text"
+                        id="username"
                         name="username"
                         class="form-control"
+                        value="{{ username if username else '' }}"
                         required>
-
+                    <div class="invalid-feedback" id="usernameFeedback">
+                        Username must be 3-20 characters and contain only letters, numbers, or underscores.
+                    </div>
                 </div>
 
-                <div class="mb-4">
-
-                    <label class="form-label">
-                        Password
-                    </label>
-
+                <!-- Email -->
+                <div class="mb-3">
+                    <label class="form-label">Email Address</label>
                     <input
-                        type="password"
-                        name="password"
+                        type="email"
+                        id="email"
+                        name="email"
                         class="form-control"
+                        value="{{ email if email else '' }}"
                         required>
+                    <div class="invalid-feedback" id="emailFeedback">
+                        Please enter a valid email address.
+                    </div>
+                </div>
 
+                <!-- Password -->
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <div class="input-group">
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control"
+                            style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
+                            required>
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword" style="border-top-right-radius: 14px; border-bottom-right-radius: 14px; border-color: #dbe2ea; border-left: none;">Show</button>
+                    </div>
+                    
+                    <!-- Strength indicator -->
+                    <div class="mt-2">
+                        <small class="text-secondary" style="font-size: 12px;">Password Strength: <strong id="strengthLabel">None</strong></small>
+                        <div class="progress mt-1" style="height: 6px; background-color: #e2e8f0; border-radius: 999px;">
+                            <div id="strengthBar" class="progress-bar" role="progressbar" style="width: 0%; border-radius: 999px; transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Feedback info -->
+                    <div class="mt-2" style="font-size: 11px; color: #64748b;" id="passwordRequirements">
+                        Must contain at least 8 characters, an uppercase, a lowercase, a number, and a special character.
+                    </div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="mb-4">
+                    <label class="form-label">Confirm Password</label>
+                    <div class="input-group">
+                        <input
+                            type="password"
+                            id="confirm_password"
+                            name="confirm_password"
+                            class="form-control"
+                            style="border-top-right-radius: 0; border-bottom-right-radius: 0;"
+                            required>
+                        <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword" style="border-top-right-radius: 14px; border-bottom-right-radius: 14px; border-color: #dbe2ea; border-left: none;">Show</button>
+                    </div>
+                    <div class="invalid-feedback" id="confirmFeedback">
+                        Passwords do not match.
+                    </div>
                 </div>
 
                 <button
                     type="submit"
-                    class="btn btn-primary btn-register">
-
+                    class="btn btn-primary btn-register text-white"
+                    id="submitBtn">
                     Create Account
-
                 </button>
 
             </form>
@@ -217,6 +274,146 @@
         </div>
 
     </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Client-side Validation Scripts -->
+    <script>
+        const form = document.getElementById('registerForm');
+        const username = document.getElementById('username');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm_password');
+        const strengthLabel = document.getElementById('strengthLabel');
+        const strengthBar = document.getElementById('strengthBar');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Toggle Password visibility
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.innerText = type === 'password' ? 'Show' : 'Hide';
+        });
+
+        document.getElementById('toggleConfirmPassword').addEventListener('click', function() {
+            const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPassword.setAttribute('type', type);
+            this.innerText = type === 'password' ? 'Show' : 'Hide';
+        });
+
+        // Dynamic Password Strength check
+        password.addEventListener('input', function() {
+            const val = password.value;
+            let score = 0;
+
+            if (val.length >= 8) score++;
+            if (/[A-Z]/.test(val)) score++;
+            if (/[a-z]/.test(val)) score++;
+            if (/[0-9]/.test(val)) score++;
+            if (/[@$!%*?&]/.test(val)) score++;
+
+            let pct = (score / 5) * 100;
+            let text = 'None';
+            let bgClass = 'bg-secondary';
+
+            if (val.length > 0) {
+                if (score <= 2) {
+                    text = 'Weak';
+                    bgClass = 'bg-danger';
+                } else if (score <= 4) {
+                    text = 'Medium';
+                    bgClass = 'bg-warning';
+                } else if (score === 5) {
+                    text = 'Strong';
+                    bgClass = 'bg-success';
+                }
+            }
+
+            strengthLabel.innerText = text;
+            strengthBar.className = 'progress-bar ' + bgClass;
+            strengthBar.style.width = pct + '%';
+        });
+
+        // Perform custom validations
+        function validateUsername() {
+            const val = username.value.trim();
+            const regex = /^[a-zA-Z0-9_]{3,20}$/;
+            if (!regex.test(val)) {
+                username.classList.add('is-invalid');
+                username.classList.remove('is-valid');
+                return false;
+            } else {
+                username.classList.remove('is-invalid');
+                username.classList.add('is-valid');
+                return true;
+            }
+        }
+
+        function validateEmail() {
+            const val = email.value.trim();
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regex.test(val)) {
+                email.classList.add('is-invalid');
+                email.classList.remove('is-valid');
+                return false;
+            } else {
+                email.classList.remove('is-invalid');
+                email.classList.add('is-valid');
+                return true;
+            }
+        }
+
+        function validatePassword() {
+            const val = password.value;
+            let valid = val.length >= 8 &&
+                        /[A-Z]/.test(val) &&
+                        /[a-z]/.test(val) &&
+                        /[0-9]/.test(val) &&
+                        /[@$!%*?&]/.test(val);
+            if (!valid) {
+                password.classList.add('is-invalid');
+                password.classList.remove('is-valid');
+                return false;
+            } else {
+                password.classList.remove('is-invalid');
+                password.classList.add('is-valid');
+                return true;
+            }
+        }
+
+        function validateConfirmPassword() {
+            if (confirmPassword.value !== password.value || confirmPassword.value === "") {
+                confirmPassword.classList.add('is-invalid');
+                confirmPassword.classList.remove('is-valid');
+                return false;
+            } else {
+                confirmPassword.classList.remove('is-invalid');
+                confirmPassword.classList.add('is-valid');
+                return true;
+            }
+        }
+
+        username.addEventListener('input', validateUsername);
+        email.addEventListener('input', validateEmail);
+        password.addEventListener('input', () => { validatePassword(); validateConfirmPassword(); });
+        confirmPassword.addEventListener('input', validateConfirmPassword);
+
+        form.addEventListener('submit', function(event) {
+            const isUserValid = validateUsername();
+            const isEmailValid = validateEmail();
+            const isPassValid = validatePassword();
+            const isConfirmValid = validateConfirmPassword();
+
+            if (!isUserValid || !isEmailValid || !isPassValid || !isConfirmValid) {
+                event.preventDefault();
+                event.stopPropagation();
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Creating Account...';
+            }
+        });
+    </script>
 
 </body>
 

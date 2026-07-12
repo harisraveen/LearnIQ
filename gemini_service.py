@@ -53,7 +53,7 @@ def generate_quiz(topic, difficulty="Medium", count=5):
         text = text.replace("```json", "")
         text = text.replace("```", "")
 
-    return json.loads(text)
+    return json.loads(text.strip())
 
 
 def generate_feedback(topic, percentage):
@@ -66,24 +66,46 @@ def generate_feedback(topic, percentage):
 
     Analyze the student's performance.
 
-    Return:
-
-    1. Performance Summary
-    2. Strong Areas
-    3. Weak Areas
-    4. Recommended Topics To Study Next
-    5. Personalized Learning Roadmap
+    Return a JSON object with the following keys and structure:
+    {{
+        "strengths": "a summary of what they did well (keep under 50 words)",
+        "weaknesses": "a summary of areas to improve (keep under 50 words)",
+        "recommended_topics": ["topic 1", "topic 2", "topic 3"],
+        "roadmap": "step-by-step roadmap to master this topic (keep under 60 words)",
+        "study_suggestions": "actionable study suggestions (keep under 50 words)"
+    }}
 
     Rules:
-    - Keep under 200 words
-    - Use bullet points
-    - No markdown symbols
-    - Plain text only
+    - Keep overall feedback detailed and precise
+    - Return ONLY valid JSON
+    - Do not wrap in ```json block or include explanations outside the JSON object
     """
 
-    response = model.generate_content(prompt)
+    try:
+        response = model.generate_content(prompt)
+        text = response.text.strip()
+        
+        if text.startswith("```json"):
+            text = text.replace("```json", "")
+            if text.endswith("```"):
+                text = text[:-3]
+        elif text.startswith("```"):
+            text = text.replace("```", "")
+            if text.endswith("```"):
+                text = text[:-3]
+        
+        return json.loads(text.strip())
+    except Exception as e:
+        print("AI Feedback Generation Error:", e)
+        # Fallback dictionary matching expectations
+        return {
+            "strengths": f"Demonstrated basic understanding of {topic}.",
+            "weaknesses": f"Needs further practice in core concepts of {topic}.",
+            "recommended_topics": [topic],
+            "roadmap": f"1. Review fundamental theory.\n2. Complete practice quizzes.\n3. Analyze wrong answers.",
+            "study_suggestions": "Dedicate 20 minutes daily to testing and flashcards."
+        }
 
-    return response.text
 
 def generate_learning_roadmap(weak_topics):
 
@@ -110,6 +132,34 @@ def generate_learning_roadmap(weak_topics):
 
     return response.text
 
+
+def generate_learning_insights(stats, topic_data):
+    if not topic_data:
+        return "Complete quizzes to generate AI learning insights!"
+
+    topics_summary = ", ".join([f"{t}: {round(s)}%" for t, s in topic_data])
+    
+    prompt = f"""
+    You are an expert AI Learning Coach.
+    Here are the overall learning metrics for the student:
+    - Total Quizzes Taken: {stats['total_quizzes']}
+    - Average Score: {stats['average_score']}%
+    - Highest Score: {stats['highest_score']}%
+    - Lowest Score: {stats['lowest_score']}%
+    - Topic-wise Performance: {topics_summary}
+
+    Generate 3-4 bullet points of high-level AI learning insights, highlighting their performance trends, core strengths, and specific areas where study habits could be improved.
+    Keep it concise, professional, encouraging, and under 150 words. Plain text with dash (-) bullet points only.
+    """
+
+    try:
+        response = model.generate_content(prompt)
+        return response.text.strip()
+    except Exception as e:
+        print("AI Insights Error:", e)
+        return "- Practice more quizzes across topics to generate detailed learning insights!\n- Stay consistent with your study schedule to maintain your learning streak."
+
+
 def generate_viva_question(topic, difficulty):
 
     prompt = f"""
@@ -130,6 +180,7 @@ def generate_viva_question(topic, difficulty):
     response = model.generate_content(prompt)
 
     return response.text.strip()
+
 
 def evaluate_viva_answer(topic, question, answer):
 
