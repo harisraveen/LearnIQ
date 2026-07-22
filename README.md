@@ -300,15 +300,20 @@ http://127.0.0.1:5000
 Add screenshots of:
 
 - Login Page
-- Registration
-- Dashboard
-- AI Quiz
-- AI Viva
-- Leaderboard
-- History
-- Mobile View
+  
+<img width="1906" height="943" alt="image" src="https://github.com/user-attachments/assets/e1676d0d-b4a6-4846-8ba3-2fcf3982831b" />
 
----
+- Dashboard
+
+<img width="1905" height="933" alt="image" src="https://github.com/user-attachments/assets/e8490984-7c75-4f40-bb36-f200ee7ad6d6" />
+
+- AI Quiz
+  
+<img width="1900" height="937" alt="image" src="https://github.com/user-attachments/assets/92396070-0477-4ae6-ac67-dda4d5cbfac6" />
+
+- AI Viva
+
+<img width="1897" height="939" alt="image" src="https://github.com/user-attachments/assets/3425a95b-5cd7-4b1c-abd4-dd94adcd9354" />
 
 # 🔄 Workflow
 
