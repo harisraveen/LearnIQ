@@ -1,78 +1,219 @@
 # 🎓 LearnIQ – AI-Powered Learning & Quiz Platform
 
-LearnIQ is an AI-powered learning platform that generates personalized quizzes and viva questions using Google's Gemini API. It helps students practice, evaluate their knowledge, and receive AI-generated feedback through an interactive and responsive web application.
+<div align="center">
+
+![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python)
+![Flask](https://img.shields.io/badge/Flask-Web_Framework-black?logo=flask)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple?logo=bootstrap)
+![SQLite](https://img.shields.io/badge/SQLite-Database-blue?logo=sqlite)
+![Gemini](https://img.shields.io/badge/Google-Gemini_AI-orange)
+![Render](https://img.shields.io/badge/Render-Deployed-success?logo=render)
+
+An AI-powered learning platform that generates personalized quizzes and viva questions using **Google Gemini AI**, helping students practice, analyze their performance, and improve their learning experience.
+
+🌐 **Live Demo:** https://learniq-xpvc.onrender.com
+
+</div>
 
 ---
 
-## 🚀 Live Demo
+# 📖 Overview
 
-🌐 https://learniq-xpvc.onrender.com
+LearnIQ is an AI-powered web application built using **Python Flask** that enables students to generate quizzes and viva questions on any topic using Google's Gemini AI.
 
----
+The platform provides:
 
-## 📌 Features
-
-- 🔐 Secure User Authentication (Login & Registration)
-- 🤖 AI-Generated Quiz Questions using Google Gemini API
-- 🎤 AI Viva Assessment
+- 🤖 AI-generated quizzes
+- 🎤 AI Viva Practice
 - 📊 Performance Dashboard
 - 🏆 Leaderboard
 - 📚 Assessment History
 - 🌙 Dark Mode
-- 📱 Fully Responsive (Desktop & Mobile)
+- 📱 Responsive UI
 - 📈 Learning Analytics
-- 💾 SQLite Database
-- ⚡ Fast Flask Backend
 
 ---
 
-## 🛠 Tech Stack
+# ✨ Features
 
-### Frontend
+## Authentication
+- Secure Login
+- User Registration
+- Session Management
+- Logout
+
+---
+
+## AI Quiz Generator
+
+- Generate quizzes using Google Gemini AI
+- Topic-based questions
+- Instant evaluation
+- Score calculation
+
+---
+
+## AI Viva Practice
+
+- AI-generated viva questions
+- Interactive answering
+- Performance evaluation
+
+---
+
+## Dashboard
+
+- Quiz statistics
+- Learning analytics
+- Average score
+- Highest score
+- Continue learning
+
+---
+
+## History
+
+- Previous assessments
+- Scores
+- Topics
+- Completion dates
+
+---
+
+## Leaderboard
+
+- Top-performing users
+- Performance ranking
+- Best scores
+
+---
+
+## Responsive Design
+
+- Desktop
+- Tablet
+- Mobile
+
+---
+
+# 🏗 System Architecture
+
+```mermaid
+flowchart TD
+
+A[User]
+
+A --> B[Responsive Web Interface]
+
+B --> C[Flask Application]
+
+C --> D[Authentication]
+
+C --> E[Quiz Module]
+
+C --> F[Viva Module]
+
+C --> G[Dashboard]
+
+C --> H[History]
+
+C --> I[Leaderboard]
+
+E --> J[Google Gemini API]
+
+F --> J
+
+C --> K[(SQLite Database)]
+
+D --> K
+
+E --> K
+
+F --> K
+
+G --> K
+
+H --> K
+
+I --> K
+
+J --> E
+
+J --> F
+
+K --> G
+
+K --> H
+
+K --> I
+```
+
+---
+
+# ⚙ Tech Stack
+
+## Frontend
+
 - HTML5
 - CSS3
 - Bootstrap 5
 - JavaScript
 - Jinja2 Templates
 
-### Backend
+---
+
+## Backend
+
 - Python
 - Flask
 
-### Database
+---
+
+## Database
+
 - SQLite
 
-### AI
+---
+
+## AI Integration
+
 - Google Gemini API
 
-### Deployment
+---
+
+## Deployment
+
 - Render
 
-### Version Control
+---
+
+## Version Control
+
 - Git
 - GitHub
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
-```text
-LearnIQ/
+```
+LearnIQ
 │
 ├── static/
 │   ├── style.css
 │   ├── logo.png
-│   └── logo_icon.png
+│   ├── logo_icon.png
 │
 ├── templates/
 │   ├── base.html
-│   ├── login.html
-│   ├── register.html
 │   ├── dashboard.html
-│   ├── quiz.html
-│   ├── result.html
 │   ├── history.html
 │   ├── leaderboard.html
+│   ├── login.html
+│   ├── profile.html
+│   ├── quiz.html
+│   ├── register.html
+│   ├── result.html
 │   ├── viva.html
 │   └── viva_result.html
 │
@@ -86,84 +227,158 @@ LearnIQ/
 
 ---
 
-## ⚙ Installation
+# 🚀 Installation
 
-### 1. Clone the repository
+## Clone Repository
 
 ```bash
 git clone https://github.com/harisraveen/LearnIQ.git
 ```
 
-### 2. Navigate into the project
+---
+
+## Navigate to Project
 
 ```bash
 cd LearnIQ
 ```
 
-### 3. Create a virtual environment
+---
 
-Windows
+## Create Virtual Environment
+
+### Windows
 
 ```bash
 python -m venv venv
 venv\Scripts\activate
 ```
 
-Linux / macOS
+### Linux / macOS
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 4. Install dependencies
+---
+
+## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 5. Create a `.env` file
+---
+
+## Configure Environment Variables
+
+Create a `.env` file.
 
 ```env
-GEMINI_API_KEY=YOUR_API_KEY
+GEMINI_API_KEY=YOUR_GOOGLE_GEMINI_API_KEY
 ```
 
-### 6. Run the application
+---
+
+## Run Application
 
 ```bash
 python app.py
 ```
 
-The application will be available at
+Application will run at
 
 ```
 http://127.0.0.1:5000
 ```
 
+---
 
-## 🎯 Future Enhancements
+# 📱 Screenshots
+
+Add screenshots of:
+
+- Login Page
+- Registration
+- Dashboard
+- AI Quiz
+- AI Viva
+- Leaderboard
+- History
+- Mobile View
+
+---
+
+# 🔄 Workflow
+
+```text
+User
+   │
+   ▼
+Login/Register
+   │
+   ▼
+Dashboard
+   │
+   ├──────────────► Generate Quiz
+   │                     │
+   │                     ▼
+   │              Gemini AI
+   │                     │
+   │                     ▼
+   │               Quiz Result
+   │
+   ├──────────────► Viva Practice
+   │                     │
+   │                     ▼
+   │              Gemini AI
+   │
+   ├──────────────► History
+   │
+   └──────────────► Leaderboard
+```
+
+---
+
+# 🎯 Future Enhancements
 
 - Email Verification
 - Forgot Password
-- PDF Report Generation
+- PDF Report Export
 - AI Study Roadmap
+- Personalized Learning Recommendations
 - Certificates
 - Admin Dashboard
-- Topic Recommendations
-- Notifications
-- Cloud Database (PostgreSQL)
-- OAuth Login (Google)
+- PostgreSQL Support
+- Google OAuth Login
+- Docker Deployment
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Developer
 
 **Haris Raveen S S**
 
-- GitHub: https://github.com/harisraveen
+- 🎓 B.Tech Information Technology
+- 🏫 SRM Institute of Science and Technology
+
+GitHub:
+https://github.com/harisraveen
+
+Live Demo:
+https://learniq-xpvc.onrender.com
 
 ---
 
-## 📜 License
+# 📄 License
 
-This project is developed for educational and portfolio purposes.
+This project is licensed under the **MIT License**.
+
+---
+
+<div align="center">
+
+⭐ If you found this project useful, consider giving it a star!
+
+</div>
