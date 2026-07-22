@@ -360,9 +360,6 @@ Dashboard
 
 **Haris Raveen S S**
 
-- 🎓 B.Tech Information Technology
-- 🏫 SRM Institute of Science and Technology
-
 GitHub:
 https://github.com/harisraveen
 
